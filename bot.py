@@ -22,7 +22,6 @@ log = logging.getLogger(__name__)
 
 bot = telebot.TeleBot(BOT_TOKEN, parse_mode="HTML")
 
-# Flask app — нужен только чтобы gunicorn не падал
 app = Flask(__name__)
 
 @app.route("/")
@@ -96,6 +95,16 @@ def kb_admin_open_chat(uid: int):
     kb.add(InlineKeyboardButton("💬 Відкрити чат з клієнтом", callback_data=f"open:{uid}"))
     return kb
 
+def kb_welcome_new():
+    """Inline-кнопки для нового незареєстрованого користувача"""
+    kb = InlineKeyboardMarkup(row_width=1)
+    kb.add(
+        InlineKeyboardButton("🚀 Зареєструватись і написати майстру", callback_data="start_reg"),
+        InlineKeyboardButton("📞 Подзвонити: 066 005 2325",            url="tel:+380660052325"),
+        InlineKeyboardButton("📍 Адреса на Google Maps",               url="https://maps.google.com/maps?q=вул.+Медична+1/11+Камʼянське"),
+    )
+    return kb
+
 
 # ── Helpers ───────────────────────────────────────────────────────────
 def user_card(u: dict) -> str:
@@ -124,30 +133,70 @@ def end_chat(initiator: str):
     bot.send_message(ADMIN_ID, admin_msg,  reply_markup=ReplyKeyboardRemove())
 
 
-# ── Handlers ──────────────────────────────────────────────────────────
+# ════════════════════════════════════════════════════════════════════
+#  /start
+# ════════════════════════════════════════════════════════════════════
 @bot.message_handler(commands=["start"])
 def cmd_start(msg):
     uid = msg.from_user.id
+
+    # Адмін
     if uid == ADMIN_ID:
-        bot.send_message(uid, "⚙️ <b>ТОП СЕРВІС · Панель майстра</b>\n\nОчікую повідомлень від клієнтів.")
+        bot.send_message(uid,
+            "⚙️ <b>ТОП СЕРВІС · Панель майстра</b>\n\n"
+            "Очікую повідомлень від клієнтів.\n\n"
+            "Коли клієнт напише — отримаєш його дані та кнопку <b>Відкрити чат</b>.")
         return
+
     user = get_user(uid)
+
+    # Вже зареєстрований
     if user:
         user_state[uid] = "idle"
         bot.send_message(uid,
-            f"⚙️ <b>ТОП СЕРВІС</b> · Камʼянське\n\nЗ поверненням, <b>{user['name']}</b>! 👋\n\n"
-            f"Натисніть кнопку нижче щоб написати майстру.",
+            f"⚙️ <b>ТОП СЕРВІС</b> · Камʼянське\n\n"
+            f"З поверненням, <b>{user['name']}</b>! 👋\n\n"
+            f"📱 Ремонт смартфонів та ноутбуків\n"
+            f"⚡ від 30 хвилин · 🛡 Гарантія 90 днів\n\n"
+            f"Оберіть що вас цікавить 👇",
             reply_markup=kb_client_idle())
-    else:
-        user_state[uid] = "wait_phone"
-        bot.send_message(uid,
-            "⚙️ <b>ТОП СЕРВІС</b> · Ремонт смартфонів та ноутбуків\n"
-            "📍 вул. Медична 1/11, Камʼянське\n\n"
-            "━━━━━━━━━━━━━━━━━━━━\n"
-            "Для зв'язку з майстром потрібна <b>реєстрація</b>.\n\n"
-            "📲 Натисніть кнопку нижче щоб поділитись номером:",
-            reply_markup=kb_phone())
+        return
 
+    # Новий користувач — привітання + inline-кнопки
+    bot.send_message(uid,
+        "👋 Вітаємо у <b>ТОП СЕРВІС</b>!\n\n"
+        "🔧 Ремонт смартфонів та ноутбуків у Камʼянському\n"
+        "📍 вул. Медична 1/11\n"
+        "🕐 Пн–Сб: 09:00–18:00\n\n"
+        "━━━━━━━━━━━━━━━━━━━━\n"
+        "📱 <b>iPhone · Samsung · Xiaomi · Huawei</b> та інші\n"
+        "💻 Ноутбуки будь-яких брендів\n\n"
+        "⚡ Ремонт від <b>30 хвилин</b>\n"
+        "🔩 Оригінальні запчастини\n"
+        "🛡 Гарантія <b>90 днів</b>\n"
+        "🔍 Діагностика <b>БЕЗКОШТОВНО</b>\n\n"
+        "━━━━━━━━━━━━━━━━━━━━\n"
+        "Щоб написати майстру — потрібна швидка реєстрація (номер телефону) 👇",
+        reply_markup=kb_welcome_new())
+
+
+# Натиснув «Зареєструватись» в привітанні
+@bot.callback_query_handler(func=lambda c: c.data == "start_reg")
+def cb_start_reg(call):
+    uid = call.from_user.id
+    bot.answer_callback_query(call.id)
+    # Прибираємо inline-кнопки з попереднього повідомлення
+    bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
+    user_state[uid] = "wait_phone"
+    bot.send_message(uid,
+        "📲 Натисніть кнопку нижче щоб поділитись номером телефону.\n\n"
+        "<i>Номер потрібен щоб майстер міг зв'язатись з вами.</i>",
+        reply_markup=kb_phone())
+
+
+# ════════════════════════════════════════════════════════════════════
+#  РЕЄСТРАЦІЯ
+# ════════════════════════════════════════════════════════════════════
 @bot.message_handler(content_types=["contact"])
 def handle_contact(msg):
     uid = msg.from_user.id
@@ -173,19 +222,31 @@ def handle_name(msg):
     save_user(uid, phone, name, msg.from_user.username)
     user_state[uid] = "idle"
     bot.send_message(uid,
-        f"🎉 <b>Готово!</b>\n\n👤 {name} · 📞 {phone}\n\n"
-        f"Тепер ви можете написати майстру — він відповість вам тут.",
+        f"🎉 <b>Реєстрація завершена!</b>\n\n"
+        f"👤 {name} · 📞 {phone}\n\n"
+        f"Тепер ви можете написати майстру — він відповість вам тут 👇",
         reply_markup=kb_client_idle())
 
+
+# ════════════════════════════════════════════════════════════════════
+#  КНОПКИ КЛІЄНТА
+# ════════════════════════════════════════════════════════════════════
 @bot.message_handler(func=lambda m: m.text == "📍 Адреса" and m.from_user.id != ADMIN_ID)
 def btn_address(msg):
     bot.send_message(msg.from_user.id,
-        "📍 вул. Медична 1/11, Камʼянське\n🕐 Пн–Сб: 09:00–18:00\n\n"
-        "https://maps.google.com/maps?q=вул.+Медична+1/11+Камʼянське")
+        "📍 <b>ТОП СЕРВІС</b>\n"
+        "вул. Медична 1/11, Камʼянське\n\n"
+        "🕐 Пн–Сб: 09:00–18:00\n"
+        "❌ Неділя: вихідний\n\n"
+        "🗺 https://maps.google.com/maps?q=вул.+Медична+1/11+Камʼянське")
 
 @bot.message_handler(func=lambda m: m.text == "📞 Подзвонити" and m.from_user.id != ADMIN_ID)
 def btn_call(msg):
-    bot.send_message(msg.from_user.id, "📞 <b>066 005 2325</b>\n🕐 Пн–Сб: 09:00–18:00")
+    bot.send_message(msg.from_user.id,
+        "📞 <b>066 005 2325</b>\n\n"
+        "🕐 Пн–Сб: 09:00–18:00\n"
+        "Або напишіть майстру прямо тут 👇",
+        reply_markup=kb_client_idle())
 
 @bot.message_handler(func=lambda m: m.text == "💬 Написати майстру" and m.from_user.id != ADMIN_ID)
 def btn_write(msg):
@@ -203,9 +264,14 @@ def btn_write(msg):
         log.error(f"Помилка сповіщення адміна: {e}")
     user_state[uid] = "wait_admin"
     bot.send_message(uid,
-        "⏳ Запит надіслано майстру.\nЗачекайте, він скоро відповість...",
+        "⏳ <b>Запит надіслано майстру.</b>\n\n"
+        "Зачекайте, він скоро підключиться...",
         reply_markup=ReplyKeyboardRemove())
 
+
+# ════════════════════════════════════════════════════════════════════
+#  АДМІН: відкрити чат
+# ════════════════════════════════════════════════════════════════════
 @bot.callback_query_handler(func=lambda c: c.data.startswith("open:"))
 def cb_open_chat(call):
     if call.from_user.id != ADMIN_ID:
@@ -223,13 +289,19 @@ def cb_open_chat(call):
     bot.answer_callback_query(call.id)
     bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
     bot.send_message(ADMIN_ID,
-        f"💬 <b>Чат відкрито</b> з {user['name']} ({user['phone']})\n\n"
-        f"Всі повідомлення будуть пересилатись клієнту.",
+        f"💬 <b>Чат відкрито</b>\n"
+        f"👤 {user['name']} · 📞 {user['phone']}\n\n"
+        f"Пишіть — повідомлення будуть пересилатись клієнту.",
         reply_markup=kb_admin_in_chat())
     bot.send_message(uid,
-        "✅ <b>Майстер підключився!</b>\n\nПишіть ваше питання:",
+        "✅ <b>Майстер підключився!</b>\n\n"
+        "Пишіть ваше питання або опишіть проблему 👇",
         reply_markup=kb_client_in_chat())
 
+
+# ════════════════════════════════════════════════════════════════════
+#  ЗАВЕРШЕННЯ ЧАТУ
+# ════════════════════════════════════════════════════════════════════
 @bot.message_handler(func=lambda m: m.text == "🔴 Завершити чат" and m.from_user.id == ADMIN_ID)
 def admin_end_chat(msg):
     if not active_chat:
@@ -246,6 +318,10 @@ def client_end_chat(msg):
         return
     end_chat("client")
 
+
+# ════════════════════════════════════════════════════════════════════
+#  RELAY
+# ════════════════════════════════════════════════════════════════════
 @bot.message_handler(
     func=lambda m: m.from_user.id != ADMIN_ID and user_state.get(m.from_user.id) == "in_chat",
     content_types=["text","photo","video","document","voice","sticker"])
@@ -276,6 +352,10 @@ def admin_msg(msg):
         log.error(f"Relay admin→client: {e}")
         bot.send_message(ADMIN_ID, f"❌ Помилка: {e}")
 
+
+# ════════════════════════════════════════════════════════════════════
+#  ЗАХИСТ
+# ════════════════════════════════════════════════════════════════════
 @bot.message_handler(func=lambda m: m.from_user.id != ADMIN_ID
     and user_state.get(m.from_user.id) not in ("wait_name","idle","in_chat","wait_admin"))
 def unregistered(msg):
@@ -284,7 +364,7 @@ def unregistered(msg):
     bot.send_message(uid, "⚠️ Спочатку зареєструйтесь:", reply_markup=kb_phone())
 
 
-# ── Запуск polling в отдельном потоке ────────────────────────────────
+# ── Polling thread ────────────────────────────────────────────────────
 def run_polling():
     db_init()
     log.info("⚙️ Bot polling запущено...")

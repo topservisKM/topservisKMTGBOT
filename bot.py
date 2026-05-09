@@ -1,16 +1,3 @@
-"""
-╔══════════════════════════════════════════════════════╗
-║   ТОП СЕРВІС · Relay Chat Bot · pyTelegramBotAPI    ║
-╚══════════════════════════════════════════════════════╝
-
-ВСТАНОВЛЕННЯ:
-  pip install pyTelegramBotAPI python-dotenv
-
-.env:
-  BOT_TOKEN=7123456789:AAF...
-  ADMIN_ID=123456789
-"""
-
 import os
 import sqlite3
 import logging

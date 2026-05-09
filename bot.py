@@ -367,7 +367,8 @@ def unregistered(msg):
 # ── Polling thread ────────────────────────────────────────────────────
 def run_polling():
     db_init()
-    log.info("⚙️ Bot polling запущено...")
+    bot.remove_webhook()
+    log.info("⚙️ Webhook видалено. Bot polling запущено...")
     bot.infinity_polling(timeout=30, long_polling_timeout=30)
 
 polling_thread = threading.Thread(target=run_polling, daemon=True)

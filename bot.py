@@ -33,7 +33,7 @@ def health():
     return "OK", 200
 
 
-# ── Состояния ─────────────────────────────────────────────────────────
+# ── Стани ─────────────────────────────────────────────────────────────
 user_state: dict[int, str] = {}
 user_temp:  dict[int, dict] = {}
 active_chat: dict = {}
@@ -96,7 +96,6 @@ def kb_admin_open_chat(uid: int):
     return kb
 
 def kb_welcome_new():
-    """Inline-кнопки для нового незареєстрованого користувача"""
     kb = InlineKeyboardMarkup(row_width=1)
     kb.add(
         InlineKeyboardButton("🚀 Зареєструватись і написати майстру", callback_data="start_reg"),
@@ -115,6 +114,19 @@ def user_card(u: dict) -> str:
         f"🔗 {uname} · <code>{u['user_id']}</code>\n"
         f"📅 {u.get('reg_date','—')}"
     )
+
+def relay_to(chat_id: int, from_chat_id: int, message_id: int) -> bool:
+    """
+    Копіює повідомлення без «Переслано від» — працює незалежно
+    від privacy-налаштувань відправника.
+    Повертає True якщо успішно, False при помилці.
+    """
+    try:
+        bot.copy_message(chat_id, from_chat_id, message_id)
+        return True
+    except Exception as e:
+        log.error(f"copy_message {from_chat_id}→{chat_id}: {e}")
+        return False
 
 def end_chat(initiator: str):
     uid = active_chat.pop("user_id", None)
@@ -140,7 +152,6 @@ def end_chat(initiator: str):
 def cmd_start(msg):
     uid = msg.from_user.id
 
-    # Адмін
     if uid == ADMIN_ID:
         bot.send_message(uid,
             "⚙️ <b>ТОП СЕРВІС · Панель майстра</b>\n\n"
@@ -150,7 +161,6 @@ def cmd_start(msg):
 
     user = get_user(uid)
 
-    # Вже зареєстрований
     if user:
         user_state[uid] = "idle"
         bot.send_message(uid,
@@ -162,7 +172,6 @@ def cmd_start(msg):
             reply_markup=kb_client_idle())
         return
 
-    # Новий користувач — привітання + inline-кнопки
     bot.send_message(uid,
         "👋 Вітаємо у <b>ТОП СЕРВІС</b>!\n\n"
         "🔧 Ремонт смартфонів та ноутбуків у Камʼянському\n"
@@ -180,12 +189,10 @@ def cmd_start(msg):
         reply_markup=kb_welcome_new())
 
 
-# Натиснув «Зареєструватись» в привітанні
 @bot.callback_query_handler(func=lambda c: c.data == "start_reg")
 def cb_start_reg(call):
     uid = call.from_user.id
     bot.answer_callback_query(call.id)
-    # Прибираємо inline-кнопки з попереднього повідомлення
     bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
     user_state[uid] = "wait_phone"
     bot.send_message(uid,
@@ -320,48 +327,92 @@ def client_end_chat(msg):
 
 
 # ════════════════════════════════════════════════════════════════════
-#  RELAY
+#  RELAY: клієнт → адмін
 # ════════════════════════════════════════════════════════════════════
 @bot.message_handler(
     func=lambda m: m.from_user.id != ADMIN_ID and user_state.get(m.from_user.id) == "in_chat",
-    content_types=["text","photo","video","document","voice","sticker"])
+    content_types=["text", "photo", "video", "document", "voice", "sticker"])
 def client_msg(msg):
     uid  = msg.from_user.id
     user = get_user(uid)
     name = user["name"] if user else str(uid)
+
     if active_chat.get("user_id") != uid:
         bot.send_message(uid, "⚠️ Чат ще не відкрито майстром. Зачекайте...")
         return
-    try:
-        bot.send_message(ADMIN_ID, f"👤 <b>{name}:</b>")
-        bot.forward_message(ADMIN_ID, uid, msg.message_id)
-    except Exception as e:
-        log.error(f"Relay client→admin: {e}")
 
+    bot.send_message(ADMIN_ID, f"👤 <b>{name}:</b>")
+    ok = relay_to(ADMIN_ID, uid, msg.message_id)
+    if not ok:
+        bot.send_message(ADMIN_ID, "❌ Не вдалось отримати повідомлення клієнта.")
+
+
+# ════════════════════════════════════════════════════════════════════
+#  RELAY: адмін → клієнт
+# ════════════════════════════════════════════════════════════════════
 @bot.message_handler(
     func=lambda m: m.from_user.id == ADMIN_ID and bool(active_chat),
-    content_types=["text","photo","video","document","voice","sticker"])
+    content_types=["text", "photo", "video", "document", "voice", "sticker"])
 def admin_msg(msg):
     uid = active_chat.get("user_id")
     if not uid:
         return
-    try:
-        bot.send_message(uid, "🔧 <b>Майстер:</b>")
-        bot.forward_message(uid, ADMIN_ID, msg.message_id)
-    except Exception as e:
-        log.error(f"Relay admin→client: {e}")
-        bot.send_message(ADMIN_ID, f"❌ Помилка: {e}")
+
+    # ── КЛЮЧОВЕ ВИПРАВЛЕННЯ ──────────────────────────────────────────
+    # copy_message копіює вміст без «Переслано від».
+    # forward_message вимагає дозвіл у налаштуваннях Telegram-акаунту
+    # адміна → якщо дозвіл вимкнено, клієнт нічого не отримував.
+    # ─────────────────────────────────────────────────────────────────
+    bot.send_message(uid, "🔧 <b>Майстер:</b>")
+    ok = relay_to(uid, ADMIN_ID, msg.message_id)
+    if not ok:
+        bot.send_message(ADMIN_ID,
+            "❌ Не вдалось надіслати повідомлення клієнту.\n"
+            "Можливо, клієнт заблокував бота.")
 
 
 # ════════════════════════════════════════════════════════════════════
-#  ЗАХИСТ
+#  Клієнт в очікуванні — повідомлення не губляться
+# ════════════════════════════════════════════════════════════════════
+@bot.message_handler(
+    func=lambda m: m.from_user.id != ADMIN_ID and user_state.get(m.from_user.id) == "wait_admin",
+    content_types=["text", "photo", "video", "document", "voice", "sticker"])
+def client_msg_waiting(msg):
+    """
+    Клієнт написав поки чекає — раніше повідомлення просто зникали.
+    Тепер отримує підтвердження, а майстер бачить що клієнт нетерплячий.
+    """
+    uid  = msg.from_user.id
+    user = get_user(uid)
+    name = user["name"] if user else str(uid)
+
+    bot.send_message(uid,
+        "⏳ Майстер ще не підключився, але ваше повідомлення збережено.\n"
+        "Зачекайте трохи — він відповість як тільки буде вільний.")
+
+    # Пересилаємо адміну щоб він бачив нетерплячого клієнта
+    try:
+        bot.send_message(ADMIN_ID,
+            f"📩 <b>{name}</b> написав поки очікує чату:")
+        relay_to(ADMIN_ID, uid, msg.message_id)
+    except Exception as e:
+        log.error(f"wait_admin relay: {e}")
+
+
+# ════════════════════════════════════════════════════════════════════
+#  ЗАХИСТ: незареєстровані
 # ════════════════════════════════════════════════════════════════════
 @bot.message_handler(func=lambda m: m.from_user.id != ADMIN_ID
-    and user_state.get(m.from_user.id) not in ("wait_name","idle","in_chat","wait_admin"))
+    and user_state.get(m.from_user.id) not in ("wait_name", "idle", "in_chat", "wait_admin", "wait_phone"))
 def unregistered(msg):
     uid = msg.from_user.id
-    user_state[uid] = "wait_phone"
-    bot.send_message(uid, "⚠️ Спочатку зареєструйтесь:", reply_markup=kb_phone())
+    user = get_user(uid)
+    if user:
+        user_state[uid] = "idle"
+        bot.send_message(uid, "Оберіть дію 👇", reply_markup=kb_client_idle())
+    else:
+        user_state[uid] = "wait_phone"
+        bot.send_message(uid, "⚠️ Спочатку зареєструйтесь:", reply_markup=kb_phone())
 
 
 # ── Polling thread ────────────────────────────────────────────────────

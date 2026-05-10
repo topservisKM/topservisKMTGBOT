@@ -22,8 +22,6 @@ ADMIN_ID = int(ADMIN_ID)
 bot = telebot.TeleBot(BOT_TOKEN)
 app = Flask(__name__)
 
-WEBHOOK_URL = f"{RENDER_EXTERNAL_URL}/{BOT_TOKEN}"
-
 # ==================== DATA ====================
 
 DATA_FILE = "chat_sessions.json"

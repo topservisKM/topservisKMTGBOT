@@ -1,426 +1,397 @@
-import os
-import sqlite3
-import logging
-import threading
-from datetime import datetime
-from dotenv import load_dotenv
 import telebot
-from telebot.types import (
-    ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove,
-    InlineKeyboardMarkup, InlineKeyboardButton,
-)
-from flask import Flask
+from telebot import types
+from datetime import datetime
+import json
+import os
 
-load_dotenv()
+# ==================== КОНФІГУРАЦІЯ ====================
 
-BOT_TOKEN = os.getenv("BOT_TOKEN", "YOUR_BOT_TOKEN")
-ADMIN_ID  = int(os.getenv("ADMIN_ID", "0"))
-DB_PATH   = "topservice.db"
+# Використання змінних оточення для безпеки
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+ADMIN_ID = int(os.getenv('ADMIN_ID'))
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
-log = logging.getLogger(__name__)
+if not BOT_TOKEN or not ADMIN_ID:
+    print("❌ ПОМИЛКА: BOT_TOKEN або ADMIN_ID не встановлені!")
+    print("Встановіть змінні оточення на Render")
+    exit(1)
 
-bot = telebot.TeleBot(BOT_TOKEN, parse_mode="HTML")
+try:
+    bot = telebot.TeleBot(BOT_TOKEN)
+    print("✅ Бот успішно ініціалізований")
+except Exception as e:
+    print(f"❌ Помилка ініціалізації: {e}")
+    exit(1)
 
-app = Flask(__name__)
+# ==================== КОНСТАНТИ ====================
 
-@app.route("/")
-def index():
-    return "OK", 200
+DATA_FILE = "chat_sessions.json"
 
-@app.route("/health")
-def health():
-    return "OK", 200
+active_chats = {}
+waiting_for_phone = {}
+waiting_for_name = {}
 
+# ==================== ДОПОМІЖНІ ФУНКЦІЇ ====================
 
-# ── Стани ─────────────────────────────────────────────────────────────
-user_state: dict[int, str] = {}
-user_temp:  dict[int, dict] = {}
-active_chat: dict = {}
+def get_main_keyboard():
+    """Головна клавіатура бота"""
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    btn1 = types.KeyboardButton("✍️ Написати майстру")
+    btn2 = types.KeyboardButton("📅 Графік роботи")
+    markup.add(btn1, btn2)
+    return markup
 
+def get_phone_keyboard():
+    """Клавіатура для запиту номера телефону"""
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+    btn = types.KeyboardButton("📱 Поділитися номером", request_contact=True)
+    btn_cancel = types.KeyboardButton("❌ Скасувати")
+    markup.add(btn)
+    markup.add(btn_cancel)
+    return markup
 
-# ── DB ────────────────────────────────────────────────────────────────
-def db_init():
-    with sqlite3.connect(DB_PATH) as c:
-        c.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                user_id  INTEGER PRIMARY KEY,
-                phone    TEXT NOT NULL,
-                name     TEXT NOT NULL,
-                username TEXT,
-                reg_date TEXT
-            )
-        """)
-        c.commit()
+def get_chat_keyboard():
+    """Клавіатура під час активного чату"""
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    btn = types.KeyboardButton("🛑 Завершити чат")
+    markup.add(btn)
+    return markup
 
-def get_user(uid: int):
-    with sqlite3.connect(DB_PATH) as c:
-        c.row_factory = sqlite3.Row
-        r = c.execute("SELECT * FROM users WHERE user_id=?", (uid,)).fetchone()
-        return dict(r) if r else None
+def load_chats():
+    """Завантажити дані чатів з файлу"""
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return {}
 
-def save_user(uid, phone, name, username):
-    with sqlite3.connect(DB_PATH) as c:
-        c.execute(
-            "INSERT OR REPLACE INTO users VALUES (?,?,?,?,?)",
-            (uid, phone, name, username, datetime.now().strftime("%d.%m.%Y %H:%M"))
-        )
-        c.commit()
+def save_chats(data):
+    """Зберегти дані чатів у файл"""
+    with open(DATA_FILE, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
-
-# ── Keyboards ─────────────────────────────────────────────────────────
-def kb_phone():
-    kb = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    kb.add(KeyboardButton("📲 Поділитись номером", request_contact=True))
-    return kb
-
-def kb_client_idle():
-    kb = ReplyKeyboardMarkup(resize_keyboard=True)
-    kb.add(KeyboardButton("💬 Написати майстру"))
-    kb.add(KeyboardButton("📞 Подзвонити"), KeyboardButton("📍 Адреса"))
-    return kb
-
-def kb_client_in_chat():
-    kb = ReplyKeyboardMarkup(resize_keyboard=True)
-    kb.add(KeyboardButton("🔴 Завершити чат"))
-    return kb
-
-def kb_admin_in_chat():
-    kb = ReplyKeyboardMarkup(resize_keyboard=True)
-    kb.add(KeyboardButton("🔴 Завершити чат"))
-    return kb
-
-def kb_admin_open_chat(uid: int):
-    kb = InlineKeyboardMarkup()
-    kb.add(InlineKeyboardButton("💬 Відкрити чат з клієнтом", callback_data=f"open:{uid}"))
-    return kb
-
-def kb_welcome_new():
-    kb = InlineKeyboardMarkup(row_width=1)
-    kb.add(
-        InlineKeyboardButton("🚀 Зареєструватись і написати майстру", callback_data="start_reg"),
-        InlineKeyboardButton("📞 Подзвонити: 066 005 2325",            url="tel:+380660052325"),
-        InlineKeyboardButton("📍 Адреса на Google Maps",               url="https://maps.google.com/maps?q=вул.+Медична+1/11+Камʼянське"),
-    )
-    return kb
-
-
-# ── Helpers ───────────────────────────────────────────────────────────
-def user_card(u: dict) -> str:
-    uname = f"@{u['username']}" if u.get("username") else "—"
-    return (
-        f"👤 <b>{u['name']}</b>\n"
-        f"📞 <b>{u['phone']}</b>\n"
-        f"🔗 {uname} · <code>{u['user_id']}</code>\n"
-        f"📅 {u.get('reg_date','—')}"
-    )
-
-def relay_to(chat_id: int, from_chat_id: int, message_id: int) -> bool:
-    """
-    Копіює повідомлення без «Переслано від» — працює незалежно
-    від privacy-налаштувань відправника.
-    Повертає True якщо успішно, False при помилці.
-    """
-    try:
-        bot.copy_message(chat_id, from_chat_id, message_id)
-        return True
-    except Exception as e:
-        log.error(f"copy_message {from_chat_id}→{chat_id}: {e}")
+def is_working_hours():
+    """Перевірка чи сервіс працює"""
+    now = datetime.now()
+    day_of_week = now.weekday()  # 0 = пн, 1 = вт, ..., 6 = вс
+    hour = now.hour
+    
+    # Неділя: закрито
+    if day_of_week == 6:
         return False
+    
+    # Субота: 11:00 - 14:00
+    if day_of_week == 5:
+        return 11 <= hour < 14
+    
+    # Пн-Пт: 10:00 - 18:00
+    return 10 <= hour < 18
 
-def end_chat(initiator: str):
-    uid = active_chat.pop("user_id", None)
-    if not uid:
+# ==================== КОМАНДИ ====================
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    """Команда /start"""
+    user_name = message.from_user.first_name or "Користувач"
+    bot.send_message(
+        message.chat.id,
+        f"🔧 Привіт, {user_name}!\n\n"
+        f"Добро пожалуйте до <b>ТОП СЕРВІС</b> 🏢\n\n"
+        f"Ми готові допомогти вам з будь-якими проблемами!",
+        parse_mode='HTML',
+        reply_markup=get_main_keyboard()
+    )
+
+@bot.message_handler(commands=['help'])
+def help_command(message):
+    """Команда /help"""
+    bot.send_message(
+        message.chat.id,
+        "ℹ️ <b>Як користуватись ботом:</b>\n\n"
+        "📱 <b>Написати майстру</b> - скласти заявку на обслуговування\n"
+        "📅 <b>Графік роботи</b> - дізнатись час роботи\n\n"
+        "Під час активного чату можна легко спілкуватись з майстром!",
+        parse_mode='HTML',
+        reply_markup=get_main_keyboard()
+    )
+
+# ==================== ОБРОБКА ОСНОВНИХ КНОПОК ====================
+
+@bot.message_handler(func=lambda message: message.text == "📅 Графік роботи")
+def show_schedule(message):
+    """Показати графік роботи"""
+    bot.send_message(
+        message.chat.id,
+        "📅 <b>Графік роботи ТОП СЕРВІС</b>\n\n"
+        "Понеділок - П'ятниця: 10:00 - 18:00\n"
+        "Субота: 11:00 - 14:00\n"
+        "Неділя: Вихідний\n\n"
+        "Зв'яжіться з нами у зазначений час!",
+        parse_mode='HTML',
+        reply_markup=get_main_keyboard()
+    )
+
+@bot.message_handler(func=lambda message: message.text == "✍️ Написати майстру")
+def start_request(message):
+    """Почати процес написання до майстру"""
+    if not is_working_hours():
+        bot.send_message(
+            message.chat.id,
+            "⏰ На жаль, сервіс наразі закритий.\n\n"
+            "📅 <b>Графік роботи ТОП СЕРВІС</b>\n\n"
+            "Понеділок - П'ятниця: 10:00 - 18:00\n"
+            "Субота: 11:00 - 14:00\n"
+            "Неділя: Вихідний",
+            parse_mode='HTML',
+            reply_markup=get_main_keyboard()
+        )
         return
-    user_state[uid] = "idle"
-    if initiator == "admin":
-        client_msg = "🔴 <b>Майстер завершив чат.</b>\n\nЯкщо є ще питання — пишіть знову!"
-        admin_msg  = "🔴 Чат завершено."
-    else:
-        user = get_user(uid)
-        name = user["name"] if user else str(uid)
-        client_msg = "🔴 <b>Чат завершено.</b>\n\nДякуємо! Якщо є ще питання — пишіть знову."
-        admin_msg  = f"🔴 Клієнт <b>{name}</b> завершив чат."
-    bot.send_message(uid,      client_msg, reply_markup=kb_client_idle())
-    bot.send_message(ADMIN_ID, admin_msg,  reply_markup=ReplyKeyboardRemove())
+    
+    waiting_for_phone[message.chat.id] = True
+    
+    bot.send_message(
+        message.chat.id,
+        "📱 Будь ласка, поділіться вашим номером телефону:",
+        reply_markup=get_phone_keyboard()
+    )
 
+@bot.message_handler(func=lambda message: message.text == "❌ Скасувати")
+def cancel_request(message):
+    """Скасувати заявку"""
+    if message.chat.id in waiting_for_phone:
+        del waiting_for_phone[message.chat.id]
+    if message.chat.id in waiting_for_name:
+        del waiting_for_name[message.chat.id]
+    
+    bot.send_message(
+        message.chat.id,
+        "❌ Заявку скасовано.",
+        reply_markup=get_main_keyboard()
+    )
 
-# ════════════════════════════════════════════════════════════════════
-#  /start
-# ════════════════════════════════════════════════════════════════════
-@bot.message_handler(commands=["start"])
-def cmd_start(msg):
-    uid = msg.from_user.id
+# ==================== ОБРОБКА КОНТАКТУ ====================
 
-    if uid == ADMIN_ID:
-        bot.send_message(uid,
-            "⚙️ <b>ТОП СЕРВІС · Панель майстра</b>\n\n"
-            "Очікую повідомлень від клієнтів.\n\n"
-            "Коли клієнт напише — отримаєш його дані та кнопку <b>Відкрити чат</b>.")
+@bot.message_handler(content_types=['contact'])
+def handle_contact(message):
+    """Обробити отримання номера телефону"""
+    if message.chat.id not in waiting_for_phone:
         return
+    
+    phone = message.contact.phone_number
+    
+    if message.chat.id not in active_chats:
+        active_chats[message.chat.id] = {}
+    
+    active_chats[message.chat.id]['phone'] = phone
+    active_chats[message.chat.id]['user_id'] = message.chat.id
+    
+    del waiting_for_phone[message.chat.id]
+    waiting_for_name[message.chat.id] = True
+    
+    bot.send_message(
+        message.chat.id,
+        f"✅ Номер отримано: {phone}\n\n👤 Тепер напишіть ваше ім'я:",
+        reply_markup=types.ReplyKeyboardRemove()
+    )
 
-    user = get_user(uid)
+# ==================== ОБРОБКА ІМЕНІ ====================
 
-    if user:
-        user_state[uid] = "idle"
-        bot.send_message(uid,
-            f"⚙️ <b>ТОП СЕРВІС</b> · Камʼянське\n\n"
-            f"З поверненням, <b>{user['name']}</b>! 👋\n\n"
-            f"📱 Ремонт смартфонів та ноутбуків\n"
-            f"⚡ від 30 хвилин · 🛡 Гарантія 90 днів\n\n"
-            f"Оберіть що вас цікавить 👇",
-            reply_markup=kb_client_idle())
+@bot.message_handler(func=lambda message: message.chat.id in waiting_for_name)
+def handle_name(message):
+    """Обробити отримання імені користувача"""
+    if message.text.startswith('/'):
+        bot.send_message(message.chat.id, "⚠️ Будь ласка, напишіть ваше ім'я:")
         return
+    
+    name = message.text
+    
+    active_chats[message.chat.id]['name'] = name
+    active_chats[message.chat.id]['status'] = 'waiting_admin'
+    active_chats[message.chat.id]['timestamp'] = datetime.now().isoformat()
+    
+    phone = active_chats[message.chat.id]['phone']
+    user_id = message.chat.id
+    
+    del waiting_for_name[message.chat.id]
+    
+    bot.send_message(
+        message.chat.id,
+        f"✅ Дякуємо, {name}!\n\n"
+        f"Ваша заявка надіслана майстру.\n"
+        f"Очікуйте на відповідь...",
+        reply_markup=get_main_keyboard()
+    )
+    
+    # Повідомлення адміністратору
+    admin_message = (
+        f"📬 <b>НОВА ЗАЯВКА</b>\n\n"
+        f"👤 <b>Ім'я:</b> {name}\n"
+        f"📱 <b>Номер телефону:</b> {phone}\n"
+        f"🆔 <b>ID користувача:</b> {user_id}\n"
+        f"⏰ <b>Час:</b> {datetime.now().strftime('%d.%m.%Y %H:%M:%S')}\n\n"
+        f"<i>Натисніть кнопку нижче, щоб відкрити чат</i>"
+    )
+    
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton("💬 Відкрити чат", callback_data=f"open_chat_{user_id}"))
+    
+    bot.send_message(ADMIN_ID, admin_message, parse_mode='HTML', reply_markup=markup)
+    save_chats(active_chats)
 
-    bot.send_message(uid,
-        "👋 Вітаємо у <b>ТОП СЕРВІС</b>!\n\n"
-        "🔧 Ремонт смартфонів та ноутбуків у Камʼянському\n"
-        "📍 вул. Медична 1/11\n"
-        "🕐 Пн–Сб: 09:00–18:00\n\n"
-        "━━━━━━━━━━━━━━━━━━━━\n"
-        "📱 <b>iPhone · Samsung · Xiaomi · Huawei</b> та інші\n"
-        "💻 Ноутбуки будь-яких брендів\n\n"
-        "⚡ Ремонт від <b>30 хвилин</b>\n"
-        "🔩 Оригінальні запчастини\n"
-        "🛡 Гарантія <b>90 днів</b>\n"
-        "🔍 Діагностика <b>БЕЗКОШТОВНО</b>\n\n"
-        "━━━━━━━━━━━━━━━━━━━━\n"
-        "Щоб написати майстру — потрібна швидка реєстрація (номер телефону) 👇",
-        reply_markup=kb_welcome_new())
+# ==================== ОБРОБКА CALLBACK ====================
 
-
-@bot.callback_query_handler(func=lambda c: c.data == "start_reg")
-def cb_start_reg(call):
-    uid = call.from_user.id
-    bot.answer_callback_query(call.id)
-    bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
-    user_state[uid] = "wait_phone"
-    bot.send_message(uid,
-        "📲 Натисніть кнопку нижче щоб поділитись номером телефону.\n\n"
-        "<i>Номер потрібен щоб майстер міг зв'язатись з вами.</i>",
-        reply_markup=kb_phone())
-
-
-# ════════════════════════════════════════════════════════════════════
-#  РЕЄСТРАЦІЯ
-# ════════════════════════════════════════════════════════════════════
-@bot.message_handler(content_types=["contact"])
-def handle_contact(msg):
-    uid = msg.from_user.id
-    if user_state.get(uid) != "wait_phone":
+@bot.callback_query_handler(func=lambda call: call.data.startswith('open_chat_'))
+def open_chat(call):
+    """Відкрити чат з користувачем"""
+    user_id = int(call.data.split('_')[-1])
+    
+    if user_id not in active_chats:
+        bot.answer_callback_query(call.id, "❌ Користувач не знайдений", show_alert=True)
         return
-    phone = msg.contact.phone_number
-    if not phone.startswith("+"):
-        phone = "+" + phone
-    user_temp[uid] = {"phone": phone}
-    user_state[uid] = "wait_name"
-    bot.send_message(uid,
-        f"✅ Номер отримано: <b>{phone}</b>\n\nЯк вас звати? Введіть <b>ім'я</b>:",
-        reply_markup=ReplyKeyboardRemove())
+    
+    active_chats[user_id]['status'] = 'chat_active'
+    active_chats[user_id]['admin_id'] = call.from_user.id
+    save_chats(active_chats)
+    
+    user_name = active_chats[user_id]['name']
+    
+    bot.send_message(
+        user_id,
+        f"✅ <b>Майстер готовий до спілкування!</b>\n\n"
+        f"Чат з майстром відкритий. Ви можете спілкуватись.\n\n"
+        f"Натисніть <b>'🛑 Завершити чат'</b> коли завершите.",
+        parse_mode='HTML',
+        reply_markup=get_chat_keyboard()
+    )
+    
+    bot.send_message(
+        ADMIN_ID,
+        f"✅ <b>Чат з {user_name} відкритий</b>\n\n"
+        f"Можете почати спілкування.\n\n"
+        f"Натисніть <b>'🛑 Завершити чат'</b> коли завершите.",
+        parse_mode='HTML',
+        reply_markup=get_chat_keyboard()
+    )
+    
+    bot.answer_callback_query(call.id, "✅ Чат відкритий", show_alert=False)
 
-@bot.message_handler(func=lambda m: user_state.get(m.from_user.id) == "wait_name")
-def handle_name(msg):
-    uid  = msg.from_user.id
-    name = msg.text.strip()
-    if len(name) < 2 or len(name) > 50:
-        bot.send_message(uid, "⚠️ Введіть коректне ім'я (2–50 символів).")
+# ==================== СПІЛКУВАННЯ В ЧАТІ ====================
+
+@bot.message_handler(func=lambda message: message.chat.id in active_chats and 
+                    active_chats[message.chat.id].get('status') == 'chat_active')
+def handle_chat_message(message):
+    """Обробити повідомлення під час активного чату"""
+    
+    user_id = message.chat.id
+    
+    if message.text == "🛑 Завершити чат":
+        close_chat(message)
         return
-    phone = user_temp.pop(uid, {}).get("phone", "")
-    save_user(uid, phone, name, msg.from_user.username)
-    user_state[uid] = "idle"
-    bot.send_message(uid,
-        f"🎉 <b>Реєстрація завершена!</b>\n\n"
-        f"👤 {name} · 📞 {phone}\n\n"
-        f"Тепер ви можете написати майстру — він відповість вам тут 👇",
-        reply_markup=kb_client_idle())
-
-
-# ════════════════════════════════════════════════════════════════════
-#  КНОПКИ КЛІЄНТА
-# ════════════════════════════════════════════════════════════════════
-@bot.message_handler(func=lambda m: m.text == "📍 Адреса" and m.from_user.id != ADMIN_ID)
-def btn_address(msg):
-    bot.send_message(msg.from_user.id,
-        "📍 <b>ТОП СЕРВІС</b>\n"
-        "вул. Медична 1/11, Камʼянське\n\n"
-        "🕐 Пн–Сб: 09:00–18:00\n"
-        "❌ Неділя: вихідний\n\n"
-        "🗺 https://maps.google.com/maps?q=вул.+Медична+1/11+Камʼянське")
-
-@bot.message_handler(func=lambda m: m.text == "📞 Подзвонити" and m.from_user.id != ADMIN_ID)
-def btn_call(msg):
-    bot.send_message(msg.from_user.id,
-        "📞 <b>066 005 2325</b>\n\n"
-        "🕐 Пн–Сб: 09:00–18:00\n"
-        "Або напишіть майстру прямо тут 👇",
-        reply_markup=kb_client_idle())
-
-@bot.message_handler(func=lambda m: m.text == "💬 Написати майстру" and m.from_user.id != ADMIN_ID)
-def btn_write(msg):
-    uid  = msg.from_user.id
-    user = get_user(uid)
-    if not user:
-        user_state[uid] = "wait_phone"
-        bot.send_message(uid, "⚠️ Спочатку зареєструйтесь:", reply_markup=kb_phone())
+    
+    is_admin = user_id == ADMIN_ID
+    is_user = user_id in active_chats
+    
+    if not (is_admin or is_user):
         return
+    
     try:
-        bot.send_message(ADMIN_ID,
-            f"🔔 <b>Новий запит на чат</b>\n━━━━━━━━━━━━━━━━━━━━\n{user_card(user)}",
-            reply_markup=kb_admin_open_chat(uid))
+        if is_user:
+            other_id = active_chats[user_id].get('admin_id')
+            sender_type = "👤 Користувач"
+        else:
+            other_id = None
+            for chat_id, chat_data in active_chats.items():
+                if chat_data.get('admin_id') == ADMIN_ID and chat_data.get('status') == 'chat_active':
+                    other_id = chat_id
+                    break
+            
+            if not other_id:
+                bot.send_message(ADMIN_ID, "⚠️ Активний чат не знайдений.")
+                return
+            
+            sender_type = "🛠️ Майстер"
+        
+        formatted_message = f"{sender_type}: {message.text}"
+        bot.send_message(other_id, formatted_message)
+        
     except Exception as e:
-        log.error(f"Помилка сповіщення адміна: {e}")
-    user_state[uid] = "wait_admin"
-    bot.send_message(uid,
-        "⏳ <b>Запит надіслано майстру.</b>\n\n"
-        "Зачекайте, він скоро підключиться...",
-        reply_markup=ReplyKeyboardRemove())
+        bot.send_message(user_id, f"❌ Помилка відправки: {str(e)}")
 
-
-# ════════════════════════════════════════════════════════════════════
-#  АДМІН: відкрити чат
-# ════════════════════════════════════════════════════════════════════
-@bot.callback_query_handler(func=lambda c: c.data.startswith("open:"))
-def cb_open_chat(call):
-    if call.from_user.id != ADMIN_ID:
-        bot.answer_callback_query(call.id, "⛔ Немає прав.")
+def close_chat(message):
+    """Завершити чат"""
+    user_id = message.chat.id
+    
+    if user_id not in active_chats:
+        bot.send_message(user_id, "⚠️ Активного чату не знайдено.")
         return
-    uid  = int(call.data.split(":")[1])
-    user = get_user(uid)
-    if active_chat and active_chat.get("user_id") != uid:
-        other = get_user(active_chat["user_id"])
-        name  = other["name"] if other else str(active_chat["user_id"])
-        bot.answer_callback_query(call.id, f"⚠️ Вже є чат з {name}. Завершіть його.", show_alert=True)
-        return
-    active_chat["user_id"] = uid
-    user_state[uid] = "in_chat"
-    bot.answer_callback_query(call.id)
-    bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
-    bot.send_message(ADMIN_ID,
-        f"💬 <b>Чат відкрито</b>\n"
-        f"👤 {user['name']} · 📞 {user['phone']}\n\n"
-        f"Пишіть — повідомлення будуть пересилатись клієнту.",
-        reply_markup=kb_admin_in_chat())
-    bot.send_message(uid,
-        "✅ <b>Майстер підключився!</b>\n\n"
-        "Пишіть ваше питання або опишіть проблему 👇",
-        reply_markup=kb_client_in_chat())
-
-
-# ════════════════════════════════════════════════════════════════════
-#  ЗАВЕРШЕННЯ ЧАТУ
-# ════════════════════════════════════════════════════════════════════
-@bot.message_handler(func=lambda m: m.text == "🔴 Завершити чат" and m.from_user.id == ADMIN_ID)
-def admin_end_chat(msg):
-    if not active_chat:
-        bot.send_message(ADMIN_ID, "Активного чату немає.", reply_markup=ReplyKeyboardRemove())
-        return
-    end_chat("admin")
-
-@bot.message_handler(func=lambda m: m.text == "🔴 Завершити чат" and m.from_user.id != ADMIN_ID)
-def client_end_chat(msg):
-    uid = msg.from_user.id
-    if active_chat.get("user_id") != uid:
-        user_state[uid] = "idle"
-        bot.send_message(uid, "Чат вже завершено.", reply_markup=kb_client_idle())
-        return
-    end_chat("client")
-
-
-# ════════════════════════════════════════════════════════════════════
-#  RELAY: клієнт → адмін
-# ════════════════════════════════════════════════════════════════════
-@bot.message_handler(
-    func=lambda m: m.from_user.id != ADMIN_ID and user_state.get(m.from_user.id) == "in_chat",
-    content_types=["text", "photo", "video", "document", "voice", "sticker"])
-def client_msg(msg):
-    uid  = msg.from_user.id
-    user = get_user(uid)
-    name = user["name"] if user else str(uid)
-
-    if active_chat.get("user_id") != uid:
-        bot.send_message(uid, "⚠️ Чат ще не відкрито майстром. Зачекайте...")
-        return
-
-    bot.send_message(ADMIN_ID, f"👤 <b>{name}:</b>")
-    ok = relay_to(ADMIN_ID, uid, msg.message_id)
-    if not ok:
-        bot.send_message(ADMIN_ID, "❌ Не вдалось отримати повідомлення клієнта.")
-
-
-# ════════════════════════════════════════════════════════════════════
-#  RELAY: адмін → клієнт
-# ════════════════════════════════════════════════════════════════════
-@bot.message_handler(
-    func=lambda m: m.from_user.id == ADMIN_ID and bool(active_chat),
-    content_types=["text", "photo", "video", "document", "voice", "sticker"])
-def admin_msg(msg):
-    uid = active_chat.get("user_id")
-    if not uid:
-        return
-
-    # ── КЛЮЧОВЕ ВИПРАВЛЕННЯ ──────────────────────────────────────────
-    # copy_message копіює вміст без «Переслано від».
-    # forward_message вимагає дозвіл у налаштуваннях Telegram-акаунту
-    # адміна → якщо дозвіл вимкнено, клієнт нічого не отримував.
-    # ─────────────────────────────────────────────────────────────────
-    bot.send_message(uid, "🔧 <b>Майстер:</b>")
-    ok = relay_to(uid, ADMIN_ID, msg.message_id)
-    if not ok:
-        bot.send_message(ADMIN_ID,
-            "❌ Не вдалось надіслати повідомлення клієнту.\n"
-            "Можливо, клієнт заблокував бота.")
-
-
-# ════════════════════════════════════════════════════════════════════
-#  Клієнт в очікуванні — повідомлення не губляться
-# ════════════════════════════════════════════════════════════════════
-@bot.message_handler(
-    func=lambda m: m.from_user.id != ADMIN_ID and user_state.get(m.from_user.id) == "wait_admin",
-    content_types=["text", "photo", "video", "document", "voice", "sticker"])
-def client_msg_waiting(msg):
-    """
-    Клієнт написав поки чекає — раніше повідомлення просто зникали.
-    Тепер отримує підтвердження, а майстер бачить що клієнт нетерплячий.
-    """
-    uid  = msg.from_user.id
-    user = get_user(uid)
-    name = user["name"] if user else str(uid)
-
-    bot.send_message(uid,
-        "⏳ Майстер ще не підключився, але ваше повідомлення збережено.\n"
-        "Зачекайте трохи — він відповість як тільки буде вільний.")
-
-    # Пересилаємо адміну щоб він бачив нетерплячого клієнта
-    try:
-        bot.send_message(ADMIN_ID,
-            f"📩 <b>{name}</b> написав поки очікує чату:")
-        relay_to(ADMIN_ID, uid, msg.message_id)
-    except Exception as e:
-        log.error(f"wait_admin relay: {e}")
-
-
-# ════════════════════════════════════════════════════════════════════
-#  ЗАХИСТ: незареєстровані
-# ════════════════════════════════════════════════════════════════════
-@bot.message_handler(func=lambda m: m.from_user.id != ADMIN_ID
-    and user_state.get(m.from_user.id) not in ("wait_name", "idle", "in_chat", "wait_admin", "wait_phone"))
-def unregistered(msg):
-    uid = msg.from_user.id
-    user = get_user(uid)
-    if user:
-        user_state[uid] = "idle"
-        bot.send_message(uid, "Оберіть дію 👇", reply_markup=kb_client_idle())
+    
+    is_user = user_id in active_chats
+    
+    if is_user:
+        other_id = active_chats[user_id].get('admin_id')
+        user_name = active_chats[user_id].get('name', 'Користувач')
     else:
-        user_state[uid] = "wait_phone"
-        bot.send_message(uid, "⚠️ Спочатку зареєструйтесь:", reply_markup=kb_phone())
+        other_id = None
+        for chat_id, chat_data in active_chats.items():
+            if chat_data.get('admin_id') == ADMIN_ID and chat_data.get('status') == 'chat_active':
+                other_id = chat_id
+                user_name = chat_data.get('name', 'Користувач')
+                break
+        
+        if not other_id:
+            bot.send_message(ADMIN_ID, "⚠️ Активний чат не знайдений.")
+            return
+    
+    active_chats[other_id]['status'] = 'closed'
+    save_chats(active_chats)
+    
+    bot.send_message(
+        user_id,
+        "🛑 <b>Чат завершено</b>\n\nДякуємо за спілкування!",
+        parse_mode='HTML',
+        reply_markup=get_main_keyboard()
+    )
+    
+    bot.send_message(
+        other_id,
+        f"🛑 <b>Чат з {user_name} завершено</b>",
+        parse_mode='HTML',
+        reply_markup=get_main_keyboard()
+    )
 
+# ==================== ОБРОБКА ІНШИХ ПОВІДОМЛЕНЬ ====================
 
-# ── Polling thread ────────────────────────────────────────────────────
-def run_polling():
-    db_init()
-    bot.remove_webhook()
-    log.info("⚙️ Webhook видалено. Bot polling запущено...")
-    bot.infinity_polling(timeout=30, long_polling_timeout=30)
+@bot.message_handler(func=lambda message: True)
+def handle_other_messages(message):
+    """Обробити інші повідомлення"""
+    if message.chat.id in waiting_for_phone:
+        bot.send_message(
+            message.chat.id,
+            "⚠️ Будь ласка, поділіться номером телефону за допомогою кнопки нижче:",
+            reply_markup=get_phone_keyboard()
+        )
+    elif message.chat.id in waiting_for_name:
+        bot.send_message(message.chat.id, "⚠️ Будь ласка, напишіть ваше ім'я:")
+    else:
+        bot.send_message(
+            message.chat.id,
+            "🔧 Вибачте, я не зрозумів вашу команду. "
+            "Скористайтесь кнопками нижче:",
+            reply_markup=get_main_keyboard()
+        )
 
-polling_thread = threading.Thread(target=run_polling, daemon=True)
-polling_thread.start()
+# ==================== ЗАПУСК БОТА ====================
+
+if __name__ == "__main__":
+    print("=" * 50)
+    print("🤖 ТОП СЕРВІС БОТ - RENDER VERSION")
+    print("=" * 50)
+    print("⏳ Очікування повідомлень...")
+    print("=" * 50)
+    
+    try:
+        bot.infinity_polling()
+    except KeyboardInterrupt:
+        print("\n" + "=" * 50)
+        print("🛑 Бот зупинено")
+        print("=" * 50)
+    except Exception as e:
+        print(f"❌ Помилка: {e}")

@@ -1,6 +1,8 @@
 import os
 import json
+import threading
 from datetime import datetime
+import pytz
 
 from flask import Flask, request
 import telebot
@@ -23,6 +25,9 @@ if not WEBHOOK_URL:
 
 ADMIN_ID = int(ADMIN_ID)
 
+KYIV_TZ = pytz.timezone("Europe/Kiev")
+INACTIVITY_TIMEOUT = 10 * 60  # 10 минут в секундах
+
 bot = telebot.TeleBot(BOT_TOKEN, threaded=False)
 app = Flask(__name__)
 
@@ -33,6 +38,10 @@ DATA_FILE = "chat_sessions.json"
 waiting_for_phone = {}
 waiting_for_name = {}
 
+# Словарь таймеров бездействия: {user_id: threading.Timer}
+inactivity_timers = {}
+timers_lock = threading.Lock()
+
 
 # ==================== HELPERS ====================
 
@@ -41,7 +50,6 @@ def load_chats():
         try:
             with open(DATA_FILE, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                # Convert string keys back to int (JSON saves int keys as strings)
                 return {int(k): v for k, v in data.items()}
         except Exception:
             return {}
@@ -57,7 +65,6 @@ def save_chats(data):
 
 
 def get_active_chats():
-    """Always load fresh from disk to survive restarts."""
     return load_chats()
 
 
@@ -89,19 +96,18 @@ def get_chat_keyboard():
 
 
 def is_working_hours():
-    now = datetime.now()
+    now = datetime.now(KYIV_TZ)
     day = now.weekday()
     hour = now.hour
 
-    if day == 6:       # Sunday
+    if day == 6:        # Воскресенье
         return False
-    if day == 5:       # Saturday
+    if day == 5:        # Суббота
         return 11 <= hour < 14
-    return 10 <= hour < 18  # Monday–Friday
+    return 10 <= hour < 18  # Пн–Пт
 
 
 def find_active_user_for_admin():
-    """Find the active chat user that the admin is connected to."""
     active_chats = get_active_chats()
     for chat_id, data in active_chats.items():
         if (
@@ -110,6 +116,65 @@ def find_active_user_for_admin():
         ):
             return chat_id
     return None
+
+
+# ==================== INACTIVITY TIMER ====================
+
+def cancel_inactivity_timer(user_id):
+    """Отменить таймер бездействия для пользователя."""
+    with timers_lock:
+        timer = inactivity_timers.pop(user_id, None)
+        if timer:
+            timer.cancel()
+
+
+def reset_inactivity_timer(user_id):
+    """Сбросить таймер бездействия — вызывать при каждом сообщении в чате."""
+    cancel_inactivity_timer(user_id)
+    timer = threading.Timer(INACTIVITY_TIMEOUT, auto_close_chat, args=[user_id])
+    timer.daemon = True
+    with timers_lock:
+        inactivity_timers[user_id] = timer
+    timer.start()
+
+
+def auto_close_chat(user_id):
+    """Автоматически закрыть чат из-за бездействия."""
+    active_chats = get_active_chats()
+
+    if user_id not in active_chats:
+        return
+
+    session = active_chats[user_id]
+    if session.get("status") != "chat_active":
+        return
+
+    admin_id = session.get("admin_id")
+    active_chats[user_id]["status"] = "closed"
+    save_chats(active_chats)
+
+    # Удаляем таймер из словаря (он уже сработал)
+    with timers_lock:
+        inactivity_timers.pop(user_id, None)
+
+    try:
+        bot.send_message(
+            user_id,
+            "⏱️ Чат автоматично закрито через 10 хвилин бездіяльності.",
+            reply_markup=get_main_keyboard()
+        )
+    except Exception as e:
+        print(f"Error notifying user on auto-close: {e}")
+
+    if admin_id:
+        try:
+            bot.send_message(
+                admin_id,
+                "⏱️ Чат закрито автоматично через 10 хвилин бездіяльності.",
+                reply_markup=get_main_keyboard()
+            )
+        except Exception as e:
+            print(f"Error notifying admin on auto-close: {e}")
 
 
 # ==================== COMMANDS ====================
@@ -156,22 +221,22 @@ def show_schedule(message):
 
 @bot.message_handler(func=lambda message: message.text == "✍️ Написати майстру")
 def start_request(message):
-    # Admin should not be able to start a request as a user
     if message.chat.id == ADMIN_ID:
         bot.send_message(message.chat.id, "👨‍💼 Ви адміністратор.", reply_markup=get_main_keyboard())
         return
 
-    if not is_working_hours():
+    working = is_working_hours()
+
+    if not working:
         bot.send_message(
             message.chat.id,
-            "⏰ Сервіс зараз закритий.\n\n"
+            "⏰ Зараз неробочий час, але ви можете залишити заявку — "
+            "майстер зв'яжеться з вами у робочий час.\n\n"
             "📅 Графік роботи:\n"
             "Пн-Пт: 10:00 - 18:00\n"
             "Сб: 11:00 - 14:00\n"
             "Нд: Вихідний",
-            reply_markup=get_main_keyboard()
         )
-        return
 
     waiting_for_phone[message.chat.id] = True
     bot.send_message(
@@ -230,7 +295,6 @@ def handle_name(message):
 
     active_chats = get_active_chats()
 
-    # Guard: session lost after restart
     if message.chat.id not in active_chats:
         waiting_for_name.pop(message.chat.id, None)
         bot.send_message(
@@ -242,7 +306,7 @@ def handle_name(message):
 
     active_chats[message.chat.id]["name"] = name
     active_chats[message.chat.id]["status"] = "waiting_admin"
-    active_chats[message.chat.id]["timestamp"] = datetime.now().isoformat()
+    active_chats[message.chat.id]["timestamp"] = datetime.now(KYIV_TZ).isoformat()
     save_chats(active_chats)
 
     phone = active_chats[message.chat.id]["phone"]
@@ -256,8 +320,14 @@ def handle_name(message):
         reply_markup=get_main_keyboard()
     )
 
+    # Пометка если заявка вне рабочего времени
+    off_hours_note = ""
+    if not is_working_hours():
+        now = datetime.now(KYIV_TZ)
+        off_hours_note = f"\n⏰ <b>Поза робочим часом</b> ({now.strftime('%H:%M, %A')})"
+
     admin_message = (
-        f"📬 <b>НОВА ЗАЯВКА</b>\n\n"
+        f"📬 <b>НОВА ЗАЯВКА</b>{off_hours_note}\n\n"
         f"👤 <b>Ім'я:</b> {name}\n"
         f"📱 <b>Телефон:</b> {phone}\n"
         f"🆔 <b>ID:</b> {user_id}"
@@ -303,15 +373,20 @@ def open_chat(call):
     active_chats[user_id]["admin_id"] = ADMIN_ID
     save_chats(active_chats)
 
+    # Запускаем таймер бездействия при открытии чата
+    reset_inactivity_timer(user_id)
+
     bot.send_message(
         user_id,
-        "✅ Майстер підключився до чату",
+        "✅ Майстер підключився до чату\n\n"
+        "⏱️ Чат закриється автоматично через 10 хвилин бездіяльності.",
         reply_markup=get_chat_keyboard()
     )
 
     bot.send_message(
         ADMIN_ID,
-        "✅ Чат відкрито. Пишіть — повідомлення будуть передані користувачу.",
+        "✅ Чат відкрито. Пишіть — повідомлення будуть передані користувачу.\n\n"
+        "⏱️ Чат закриється автоматично через 10 хвилин бездіяльності.",
         reply_markup=get_chat_keyboard()
     )
 
@@ -334,12 +409,16 @@ def handle_chat(message):
         if user_id == ADMIN_ID:
             target_user = find_active_user_for_admin()
             if target_user:
+                # Сбрасываем таймер при активности админа
+                reset_inactivity_timer(target_user)
                 bot.send_message(target_user, f"🛠️ Майстер: {message.text}")
             else:
                 bot.send_message(ADMIN_ID, "⚠️ Немає активних чатів.")
         else:
             admin_id = active_chats[user_id].get("admin_id")
             if admin_id:
+                # Сбрасываем таймер при активности пользователя
+                reset_inactivity_timer(user_id)
                 name = active_chats[user_id].get("name", "Користувач")
                 bot.send_message(admin_id, f"👤 {name}: {message.text}")
 
@@ -349,7 +428,6 @@ def handle_chat(message):
 
 
 def _is_in_active_chat(message):
-    """Check if user is currently in an active chat session."""
     if message.text == "🛑 Завершити чат":
         return False
     active_chats = get_active_chats()
@@ -371,6 +449,9 @@ def close_chat(message):
             bot.send_message(ADMIN_ID, "⚠️ Немає активних чатів.", reply_markup=get_main_keyboard())
             return
 
+        # Отменяем таймер при ручном закрытии
+        cancel_inactivity_timer(target_user)
+
         active_chats[target_user]["status"] = "closed"
         save_chats(active_chats)
 
@@ -381,6 +462,9 @@ def close_chat(message):
         if user_id not in active_chats:
             bot.send_message(user_id, "⚠️ Активний чат не знайдено.", reply_markup=get_main_keyboard())
             return
+
+        # Отменяем таймер при ручном закрытии
+        cancel_inactivity_timer(user_id)
 
         admin_id = active_chats[user_id].get("admin_id")
         active_chats[user_id]["status"] = "closed"
@@ -424,7 +508,6 @@ def webhook():
 # ==================== WEBHOOK SETUP ====================
 
 def setup_webhook():
-    """Call once on startup to register webhook with Telegram."""
     try:
         bot.remove_webhook()
         bot.set_webhook(url=f"{WEBHOOK_URL}/{BOT_TOKEN}")
@@ -433,5 +516,4 @@ def setup_webhook():
         print(f"❌ Webhook setup failed: {e}")
 
 
-# Run webhook setup when module loads (works with gunicorn)
 setup_webhook()

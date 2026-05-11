@@ -8,7 +8,6 @@ from flask import Flask, request
 import telebot
 from telebot import types
 
-# ==================== CONFIG ====================
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 ADMIN_ID = os.getenv("ADMIN_ID")
@@ -26,24 +25,20 @@ if not WEBHOOK_URL:
 ADMIN_ID = int(ADMIN_ID)
 
 KYIV_TZ = pytz.timezone("Europe/Kiev")
-INACTIVITY_TIMEOUT = 10 * 60  # 10 минут в секундах
+INACTIVITY_TIMEOUT = 10 * 60  
 
 bot = telebot.TeleBot(BOT_TOKEN, threaded=False)
 app = Flask(__name__)
-
-# ==================== DATA ====================
 
 DATA_FILE = "chat_sessions.json"
 
 waiting_for_phone = {}
 waiting_for_name = {}
 
-# Словарь таймеров бездействия: {user_id: threading.Timer}
 inactivity_timers = {}
 timers_lock = threading.Lock()
 
 
-# ==================== HELPERS ====================
 
 def load_chats():
     if os.path.exists(DATA_FILE):
@@ -100,11 +95,11 @@ def is_working_hours():
     day = now.weekday()
     hour = now.hour
 
-    if day == 6:        # Воскресенье
+    if day == 6:        
         return False
-    if day == 5:        # Суббота
+    if day == 5:        
         return 11 <= hour < 14
-    return 10 <= hour < 18  # Пн–Пт
+    return 10 <= hour < 18  
 
 
 def find_active_user_for_admin():
@@ -118,7 +113,6 @@ def find_active_user_for_admin():
     return None
 
 
-# ==================== INACTIVITY TIMER ====================
 
 def cancel_inactivity_timer(user_id):
     """Отменить таймер бездействия для пользователя."""
@@ -153,7 +147,6 @@ def auto_close_chat(user_id):
     active_chats[user_id]["status"] = "closed"
     save_chats(active_chats)
 
-    # Удаляем таймер из словаря (он уже сработал)
     with timers_lock:
         inactivity_timers.pop(user_id, None)
 
@@ -177,7 +170,7 @@ def auto_close_chat(user_id):
             print(f"Error notifying admin on auto-close: {e}")
 
 
-# ==================== COMMANDS ====================
+
 
 @bot.message_handler(commands=["start"])
 def start(message):
@@ -204,7 +197,6 @@ def help_command(message):
     )
 
 
-# ==================== MAIN BUTTONS ====================
 
 @bot.message_handler(func=lambda message: message.text == "📅 Графік роботи")
 def show_schedule(message):
@@ -257,7 +249,6 @@ def cancel_request(message):
     )
 
 
-# ==================== CONTACT ====================
 
 @bot.message_handler(content_types=["contact"])
 def handle_contact(message):
@@ -284,7 +275,6 @@ def handle_contact(message):
     )
 
 
-# ==================== NAME ====================
 
 @bot.message_handler(func=lambda message: message.chat.id in waiting_for_name)
 def handle_name(message):
@@ -320,7 +310,7 @@ def handle_name(message):
         reply_markup=get_main_keyboard()
     )
 
-    # Пометка если заявка вне рабочего времени
+    
     off_hours_note = ""
     if not is_working_hours():
         now = datetime.now(KYIV_TZ)
@@ -349,7 +339,7 @@ def handle_name(message):
     )
 
 
-# ==================== CALLBACK ====================
+
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("open_chat_"))
 def open_chat(call):
@@ -373,7 +363,7 @@ def open_chat(call):
     active_chats[user_id]["admin_id"] = ADMIN_ID
     save_chats(active_chats)
 
-    # Запускаем таймер бездействия при открытии чата
+  
     reset_inactivity_timer(user_id)
 
     bot.send_message(
@@ -393,7 +383,6 @@ def open_chat(call):
     bot.answer_callback_query(call.id)
 
 
-# ==================== CHAT ====================
 
 @bot.message_handler(func=lambda message: message.text == "🛑 Завершити чат")
 def close_chat_button(message):
@@ -409,7 +398,7 @@ def handle_chat(message):
         if user_id == ADMIN_ID:
             target_user = find_active_user_for_admin()
             if target_user:
-                # Сбрасываем таймер при активности админа
+                
                 reset_inactivity_timer(target_user)
                 bot.send_message(target_user, f"🛠️ Майстер: {message.text}")
             else:
@@ -417,7 +406,7 @@ def handle_chat(message):
         else:
             admin_id = active_chats[user_id].get("admin_id")
             if admin_id:
-                # Сбрасываем таймер при активности пользователя
+              
                 reset_inactivity_timer(user_id)
                 name = active_chats[user_id].get("name", "Користувач")
                 bot.send_message(admin_id, f"👤 {name}: {message.text}")
@@ -449,7 +438,7 @@ def close_chat(message):
             bot.send_message(ADMIN_ID, "⚠️ Немає активних чатів.", reply_markup=get_main_keyboard())
             return
 
-        # Отменяем таймер при ручном закрытии
+       
         cancel_inactivity_timer(target_user)
 
         active_chats[target_user]["status"] = "closed"
@@ -463,7 +452,7 @@ def close_chat(message):
             bot.send_message(user_id, "⚠️ Активний чат не знайдено.", reply_markup=get_main_keyboard())
             return
 
-        # Отменяем таймер при ручном закрытии
+  
         cancel_inactivity_timer(user_id)
 
         admin_id = active_chats[user_id].get("admin_id")
@@ -476,7 +465,6 @@ def close_chat(message):
         bot.send_message(user_id, "🛑 Чат завершено.", reply_markup=get_main_keyboard())
 
 
-# ==================== FALLBACK ====================
 
 @bot.message_handler(func=lambda message: True)
 def other_messages(message):
@@ -490,7 +478,6 @@ def other_messages(message):
         bot.send_message(chat_id, "🔧 Використовуйте кнопки нижче", reply_markup=get_main_keyboard())
 
 
-# ==================== FLASK ====================
 
 @app.route("/", methods=["GET"])
 def index():
@@ -503,9 +490,6 @@ def webhook():
     update = telebot.types.Update.de_json(json_str)
     bot.process_new_updates([update])
     return "OK", 200
-
-
-# ==================== WEBHOOK SETUP ====================
 
 def setup_webhook():
     try:

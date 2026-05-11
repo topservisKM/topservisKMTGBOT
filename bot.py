@@ -120,7 +120,7 @@ def start(message):
     bot.send_message(
         message.chat.id,
         f"🔧 Привіт, {user_name}!\n\n"
-        f"Добро пожалуйте до <b>ТОП СЕРВІС</b> 🏢\n\n"
+        f"Ласкаво просимо до <b>ТОП СЕРВІС</b> 🏢\n\n"
         f"Ми готові допомогти вам з будь-якими проблемами!",
         parse_mode="HTML",
         reply_markup=get_main_keyboard()

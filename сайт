@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ТОП СЕРВІС — Ремонт смартфонів та ноутбуків | Камʼянське</title>
+
+<meta name="description" content="Ремонт смартфонів та ноутбуків у Камʼянському. Заміна екрану, акумулятора, роз'єму зарядки. iPhone, Samsung, Xiaomi, Huawei. Швидко, якісно, з гарантією 30 днів. Телефон: 066 005 2325">
+<meta name="keywords" content="ремонт телефонів Камʼянське, ремонт смартфонів Камʼянське, заміна екрану телефону, заміна акумулятора, ремонт ноутбуків, ТОП СЕРВІС">
+<meta name="robots" content="index, follow">
+<meta name="author" content="ТОП СЕРВІС">
+<link rel="canonical" href="https://topservice-kamianske.ua/">
+
+<meta property="og:title" content="ТОП СЕРВІС — Ремонт смартфонів у Камʼянському">
+<meta property="og:description" content="Швидкий ремонт смартфонів та ноутбуків. Оригінальні запчастини, гарантія 30 днів. Дзвоніть: 066 005 2325">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="uk_UA">
+<meta property="og:url" content="https://topservice-kamianske.ua/">
+<meta property="og:site_name" content="ТОП СЕРВІС">
+
+<meta name="theme-color" content="#1a4fc4">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ТОП СЕРВІС">
+<link rel="manifest" href="manifest.json">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<!-- ============================================================ -->
+<!-- Google tag (gtag.js) — Google Ads конверсії AW-16681727418  -->
+<!-- ============================================================ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16681727418"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-16681727418');
+</script>
+<!-- ============================================================ -->
+<!-- Фрагмент події: Прокласти маршрут (конверсія)               -->
+<!-- Спрацьовує при кліку на кнопку "Маршрут →"                  -->
+<!-- ============================================================ -->
+<script>
+  function trackRouteConversion() {
+    gtag('event', 'conversion', {'send_to': 'AW-16681727418/tK7NCIunhM0ZELrru5I-'});
+  }
+</script>
+
+<style>
+  :root {
+    --gray: #2a2d35;
+    --gray-dark: #1a1d23;
+    --gray-mid: #3a3f4b;
+    --blue: #1a4fc4;
+    --blue-bright: #2560e8;
+    --blue-glow: #3d7fff;
+    --yellow: #f5d800;
+    --yellow-bright: #ffe033;
+    --white: #f0f4ff;
+    --text-dim: #8a9ab8;
+    --viber: #7360f2;
+    --instagram: #e4405f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Exo 2', sans-serif;
+    background: var(--gray-dark);
+    color: var(--white);
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(37,96,232,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(37,96,232,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0; pointer-events: none;
+  }
+
+  .circuit-bg {
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none; overflow: hidden;
+  }
+  .circuit-bg svg { width: 100%; height: 100%; opacity: 0.07; }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    z-index: 0; pointer-events: none;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+  .repair-ticker {
+    background: linear-gradient(90deg, #0a0e18, #0d1525, #0a0e18);
+    border-bottom: 1px solid rgba(37,96,232,0.3);
+    padding: 8px 0;
+    overflow: hidden;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  }
+  .ticker-track {
+    display: flex; gap: 0; width: max-content;
+    animation: ticker-scroll 90s linear infinite;
+  }
+  @keyframes ticker-scroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+  .ticker-item {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 0 36px;
+    font-family: 'Share Tech Mono', monospace; font-size: 0.72rem;
+    color: var(--text-dim); letter-spacing: 0.06em; white-space: nowrap;
+  }
+  .ticker-item .status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #4ade80; box-shadow: 0 0 6px #4ade80;
+    animation: pulse-green 1.5s ease-in-out infinite; flex-shrink: 0;
+  }
+  .ticker-item .brand { color: var(--yellow); font-weight: 700; }
+  .ticker-item .op { color: var(--blue-glow); }
+  .ticker-sep { color: rgba(255,255,255,0.12); padding: 0 8px; }
+  @keyframes pulse-green {
+    0%,100%{opacity:1;box-shadow:0 0 6px #4ade80} 50%{opacity:.4;box-shadow:none}
+  }
+
+  .lang-switcher {
+    position: fixed; top: 100px; right: 16px;
+    z-index: 199; display: flex; gap: 6px;
+  }
+  .lang-btn {
+    padding: 5px 10px; border-radius: 4px;
+    font-family: 'Share Tech Mono', monospace; font-size: 0.72rem;
+    font-weight: 700; letter-spacing: 0.06em; cursor: pointer;
+    border: 1px solid rgba(37,96,232,0.4);
+    background: rgba(26,29,35,0.9); color: var(--text-dim);
+    transition: all 0.2s; min-height: 32px;
+  }
+  .lang-btn.active { background: var(--blue); color: var(--white); border-color: var(--blue-glow); }
+  .lang-btn:hover { color: var(--white); border-color: var(--blue-glow); }
+
+  .moskali-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    display: none; flex-direction: column;
+    align-items: center; justify-content: center;
+    cursor: pointer; animation: overlayIn 0.3s ease;
+  }
+  .moskali-overlay.show { display: flex; }
+  @keyframes overlayIn { from{opacity:0;transform:scale(1.05)} to{opacity:1;transform:scale(1)} }
+  .flag-top  { width:100%; height:50%; background:#005BBB; }
+  .flag-bottom { width:100%; height:50%; background:#FFD500; }
+  .overlay-text {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-weight: 900; font-size: clamp(2rem,8vw,5rem);
+    text-align: center; color: #fff;
+    text-shadow: 0 4px 24px rgba(0,0,0,0.7);
+    letter-spacing: 0.04em; line-height: 1.2; padding: 0 24px; pointer-events: none;
+  }
+  .overlay-hint {
+    position: absolute; bottom: 32px;
+    font-size: 0.85rem; color: rgba(255,255,255,0.6);
+    font-family: 'Share Tech Mono', monospace; letter-spacing: 0.1em;
+  }
+
+  .cta-popup {
+    position: fixed; bottom: 20px; right: 20px;
+    background: linear-gradient(135deg, rgba(26,79,196,0.95), rgba(42,45,53,0.95));
+    border: 2px solid rgba(37,96,232,0.5);
+    border-radius: 16px; padding: 24px; z-index: 190;
+    max-width: 340px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    backdrop-filter: blur(20px);
+    animation: popupSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: none;
+  }
+  .cta-popup.show { display: block; }
+  @keyframes popupSlideIn {
+    from { transform: translateY(100px) scale(0.9); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  .cta-popup-close {
+    position: absolute; top: 12px; right: 12px;
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,0.1); border: none;
+    border-radius: 8px; color: var(--white);
+    font-size: 1.4rem; cursor: pointer;
+    transition: all 0.2s; display: flex;
+    align-items: center; justify-content: center;
+  }
+  .cta-popup-close:hover { background: rgba(255,255,255,0.2); }
+  .cta-popup-title {
+    font-size: 1.3rem; font-weight: 900;
+    margin-bottom: 8px; color: var(--yellow);
+    text-shadow: 0 0 15px rgba(245,216,0,0.3);
+  }
+  .cta-popup-sub {
+    font-size: 0.85rem; color: var(--text-dim);
+    margin-bottom: 18px; line-height: 1.5;
+  }
+  .cta-popup-buttons { display: flex; flex-direction: column; gap: 10px; }
+  .cta-popup-btn {
+    padding: 14px 18px; border-radius: 10px;
+    font-weight: 800; font-size: 0.95rem;
+    border: none; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; text-decoration: none; min-height: 48px;
+  }
+  .cta-popup-btn-call {
+    background: var(--yellow); color: var(--gray-dark);
+    box-shadow: 0 0 20px rgba(245,216,0,0.3);
+  }
+  .cta-popup-btn-call:hover { background: var(--yellow-bright); transform: translateY(-2px); }
+  .cta-popup-btn-form {
+    background: rgba(37,96,232,0.3); color: var(--white);
+    border: 1px solid rgba(37,96,232,0.5);
+  }
+  .cta-popup-btn-form:hover { background: rgba(37,96,232,0.5); border-color: var(--blue-glow); }
+
+  .form-loading { display: none; text-align: center; padding: 20px; }
+  .form-loading.show { display: block; }
+  .spinner {
+    width: 40px; height: 40px; border: 3px solid rgba(37,96,232,0.2);
+    border-top-color: var(--yellow); border-radius: 50%;
+    animation: spin 0.8s linear infinite; margin: 0 auto 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .form-loading-text { font-size: 0.9rem; color: var(--text-dim); }
+
+  nav {
+    position: sticky; top: 34px; z-index: 100;
+    background: rgba(26,29,35,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 2px solid var(--blue);
+    box-shadow: 0 0 20px rgba(37,96,232,0.3);
+  }
+  nav .inner {
+    max-width: 1100px; margin: 0 auto; padding: 0 20px;
+    display: flex; align-items: center; justify-content: space-between; height: 62px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 900; font-size: 1.35rem; letter-spacing: 0.04em;
+    text-decoration: none; color: inherit; flex-shrink: 0;
+  }
+  .nav-logo .gear-icon { font-size: 1.6rem; animation: spin 8s linear infinite; display: inline-block; }
+  .logo-top { display: inline-flex; align-items: center; font-weight: 900; color: var(--yellow); line-height: 1; }
+  .logo-srv { color: var(--blue-glow); font-weight: 900; }
+  .nav-links { display: flex; gap: 24px; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--text-dim);
+    font-weight: 600; font-size: 0.85rem; letter-spacing: 0.05em;
+    text-transform: uppercase; transition: color 0.2s; position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+    height: 2px; background: var(--yellow); transform: scaleX(0); transition: transform 0.2s;
+  }
+  .nav-links a:hover { color: var(--yellow); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-phone {
+    font-family: 'Share Tech Mono', monospace; font-size: 1rem;
+    color: var(--yellow); letter-spacing: 0.06em;
+    display: flex; align-items: center; gap: 6px;
+    text-decoration: none; min-height: 44px;
+  }
+  .nav-phone:hover { color: var(--yellow-bright); }
+
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 8px; background: none; border: none;
+    min-width: 44px; min-height: 44px; align-items: center; justify-content: center;
+  }
+  .hamburger span {
+    display: block; width: 22px; height: 2px;
+    background: var(--white); border-radius: 2px; transition: all 0.3s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: translateX(10px); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .mobile-menu {
+    display: none; position: fixed;
+    top: 96px; left: 0; right: 0;
+    background: rgba(10,13,20,0.97); backdrop-filter: blur(24px);
+    border-bottom: 2px solid var(--blue);
+    border-top: 1px solid rgba(37,96,232,0.2);
+    z-index: 98; padding: 8px 0 20px;
+    flex-direction: column; gap: 0;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    transform: translateY(-20px); opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    pointer-events: none;
+  }
+  .mobile-menu.open { display: flex; transform: translateY(0); opacity: 1; pointer-events: auto; }
+  .mobile-menu a {
+    text-decoration: none; color: var(--text-dim);
+    font-weight: 700; font-size: 1.05rem; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 16px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: all 0.2s; display: flex; align-items: center; gap: 10px;
+  }
+  .mobile-menu a::before { content: '▶'; font-size: 0.55rem; color: var(--blue-glow); transition: transform 0.2s; }
+  .mobile-menu a:hover { color: var(--yellow); padding-left: 32px; background: rgba(37,96,232,0.06); }
+  .mobile-menu .m-phone {
+    color: var(--yellow); font-family: 'Share Tech Mono', monospace;
+    font-size: 1.3rem; padding: 20px 24px; border-bottom: none;
+    background: rgba(245,216,0,0.05); margin-top: 4px;
+  }
+  .mobile-menu .m-phone::before { content: '📞'; font-size: 1rem; }
+
+  .sticky-cta {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 150;
+    background: rgba(10,13,20,0.97); backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(37,96,232,0.3);
+    padding: 10px 16px 14px;
+    gap: 10px;
+  }
+  .sticky-cta-btn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 13px 10px; border-radius: 10px; border: none;
+    font-family: 'Exo 2', sans-serif; font-weight: 800; font-size: 0.95rem;
+    text-decoration: none; cursor: pointer; transition: all 0.2s; min-height: 48px;
+  }
+  .sticky-cta-phone { background: var(--yellow); color: var(--gray-dark); box-shadow: 0 0 20px rgba(245,216,0,0.3); }
+  .sticky-cta-phone:active { background: var(--yellow-bright); transform: scale(0.97); }
+  .sticky-cta-tg { background: linear-gradient(135deg,#229ed9,#1a85b8); color: #fff; }
+  .sticky-cta-tg:active { transform: scale(0.97); }
+  .sticky-cta-tg svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .sticky-cta-ig { background: linear-gradient(135deg,#f15245,#d92e7f); color: #fff; }
+  .sticky-cta-ig:active { transform: scale(0.97); }
+
+  .scroll-top {
+    position: fixed; bottom: 90px; right: 16px; z-index: 149;
+    width: 44px; height: 44px; border-radius: 12px;
+    background: rgba(26,29,35,0.95); border: 1px solid rgba(37,96,232,0.4);
+    color: var(--blue-glow); font-size: 1.2rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.3s;
+    opacity: 0; transform: translateY(20px); pointer-events: none;
+    backdrop-filter: blur(10px);
+  }
+  .scroll-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .scroll-top:hover { background: var(--blue); border-color: var(--blue-glow); color: var(--white); }
+
+  .hero {
+    min-height: 90vh; display: flex; align-items: center;
+    position: relative; overflow: hidden; padding: 60px 0 80px;
+    margin-top: 34px;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -100px; right: -150px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(37,96,232,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: ''; position: absolute; bottom: -100px; left: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(245,216,0,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center; position: relative; z-index: 1;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(37,96,232,0.15); border: 1px solid rgba(37,96,232,0.4);
+    border-radius: 4px; padding: 6px 14px;
+    font-family: 'Share Tech Mono', monospace; font-size: 0.75rem;
+    color: var(--blue-glow); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px;
+  }
+  .hero-tag::before { content: '◆'; font-size: 0.6rem; }
+  .hero h1 { font-size: clamp(2.2rem,5vw,4rem); font-weight: 900; line-height: 1.1; margin-bottom: 16px; }
+  .hero h1 .line1 { color: var(--white); display: block; }
+  .hero h1 .line2 { color: var(--yellow); display: block; text-shadow: 0 0 30px rgba(245,216,0,0.4); }
+  .hero h1 .line3 { color: var(--blue-glow); display: block; font-size: 0.65em; }
+  .hero-sub { color: var(--text-dim); font-size: 1rem; line-height: 1.6; margin-bottom: 28px; }
+  .hero-cta { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--yellow); color: var(--gray-dark);
+    font-weight: 800; font-size: 0.95rem;
+    padding: 14px 24px; border-radius: 6px;
+    text-decoration: none; letter-spacing: 0.04em;
+    transition: all 0.2s; box-shadow: 0 0 20px rgba(245,216,0,0.3); min-height: 48px;
+  }
+  .btn-primary:hover { background: var(--yellow-bright); transform: translateY(-2px); box-shadow: 0 0 35px rgba(245,216,0,0.5); }
+
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 2px solid var(--blue-bright); color: var(--blue-glow);
+    font-weight: 700; font-size: 0.95rem;
+    padding: 12px 22px; border-radius: 6px;
+    text-decoration: none; letter-spacing: 0.04em; transition: all 0.2s; min-height: 48px;
+  }
+  .btn-secondary:hover { background: rgba(37,96,232,0.15); border-color: var(--blue-glow); }
+
+  .btn-telegram {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, #229ed9, #1a85b8); color: #fff;
+    font-weight: 800; font-size: 0.95rem; padding: 14px 20px; border-radius: 6px;
+    text-decoration: none; letter-spacing: 0.04em; transition: all 0.2s;
+    box-shadow: 0 0 20px rgba(34,158,217,0.3); border: none; cursor: pointer; min-height: 48px;
+  }
+  .btn-telegram:hover { background: linear-gradient(135deg,#1a85b8,#1570a0); transform: translateY(-2px); box-shadow: 0 0 35px rgba(34,158,217,0.5); }
+  .btn-telegram svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  .hero-stats {
+    display: flex; gap: 20px; margin-top: 36px;
+    padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.08); flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat .num { font-size: 1.6rem; font-weight: 900; color: var(--yellow); font-family: 'Share Tech Mono', monospace; line-height: 1; }
+  .stat .lbl { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
+
+  .hero-visual { display: flex; justify-content: center; align-items: center; position: relative; }
+  .phone-frame {
+    width: 200px; height: 390px;
+    background: var(--gray-mid); border-radius: 36px;
+    border: 3px solid rgba(37,96,232,0.5);
+    box-shadow: 0 0 40px rgba(37,96,232,0.25), 0 0 80px rgba(37,96,232,0.1), inset 0 0 30px rgba(0,0,0,0.3);
+    position: relative; animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
+  .phone-screen {
+    position: absolute; inset: 16px 12px;
+    background: linear-gradient(135deg,#0a1628 0%,#0f2248 100%);
+    border-radius: 24px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 10px; overflow: hidden;
+  }
+  .phone-screen::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(rgba(37,96,232,0.1) 1px,transparent 1px), linear-gradient(90deg,rgba(37,96,232,0.1) 1px,transparent 1px);
+    background-size: 20px 20px;
+  }
+  .phone-icon { font-size: 2.8rem; position: relative; z-index: 1; }
+  .phone-text { color: var(--blue-glow); font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; text-align: center; letter-spacing: 0.08em; position: relative; z-index: 1; }
+  .phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 65px; height: 20px; background: var(--gray-mid); border-radius: 0 0 14px 14px; z-index: 2; }
+  .phone-btn { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); width: 46px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 3px; }
+  .orbit-ring { position: absolute; width: 340px; height: 340px; border: 1px dashed rgba(37,96,232,0.2); border-radius: 50%; animation: orbit-spin 20s linear infinite; }
+  @keyframes orbit-spin { to { transform: rotate(360deg); } }
+  .orbit-dot { position: absolute; top: -6px; left: 50%; width: 12px; height: 12px; background: var(--yellow); border-radius: 50%; box-shadow: 0 0 10px var(--yellow); transform: translateX(-50%); }
+  .badge {
+    position: absolute; background: var(--gray-mid);
+    border: 1px solid rgba(37,96,232,0.4); border-radius: 8px;
+    padding: 7px 12px; font-size: 0.72rem; font-weight: 700;
+    white-space: nowrap; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .badge-1 { top: 24px; left: -55px; color: var(--yellow); border-color: rgba(245,216,0,0.3); animation: float 3s ease-in-out infinite 0.5s; }
+  .badge-2 { bottom: 55px; right: -65px; color: var(--blue-glow); animation: float 3.5s ease-in-out infinite 1s; }
+  .badge-3 { top: 50%; left: -75px; transform: translateY(-50%); color: var(--white); animation: float 4s ease-in-out infinite 0.2s; }
+
+  section { padding: 80px 0; position: relative; z-index: 1; }
+  .section-label {
+    font-family: 'Share Tech Mono', monospace; font-size: 0.72rem;
+    letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue-glow);
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  }
+  .section-label::before, .section-label::after { content: ''; flex: none; width: 28px; height: 1px; background: var(--blue-bright); }
+  .section-title { font-size: clamp(1.6rem,3vw,2.4rem); font-weight: 900; margin-bottom: 40px; line-height: 1.15; }
+  .section-title span { color: var(--yellow); }
+
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; }
+  .service-card {
+    background: linear-gradient(135deg,rgba(58,63,75,0.6),rgba(26,29,35,0.8));
+    border: 1px solid rgba(37,96,232,0.2); border-radius: 12px;
+    padding: 26px 22px; transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .service-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg,var(--blue),var(--yellow));
+    transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+  }
+  .service-card:hover { border-color: rgba(37,96,232,0.5); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .svc-icon { font-size: 2.2rem; margin-bottom: 14px; display: block; }
+  .svc-name { font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; color: var(--white); }
+  .svc-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.6; }
+  .svc-price { margin-top: 14px; font-family: 'Share Tech Mono', monospace; font-size: 0.78rem; color: var(--yellow); letter-spacing: 0.05em; }
+
+  #price { background: rgba(10,14,24,0.7); border-top: 1px solid rgba(37,96,232,0.12); border-bottom: 1px solid rgba(37,96,232,0.12); }
+  .price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .price-card {
+    background: linear-gradient(135deg,rgba(26,79,196,0.12),rgba(26,29,35,0.9));
+    border: 1px solid rgba(37,96,232,0.25); border-radius: 12px;
+    padding: 20px 22px; display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; transition: all 0.25s; position: relative; overflow: hidden;
+  }
+  .price-card::after {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: linear-gradient(to bottom,var(--blue-glow),var(--yellow));
+    border-radius: 3px 0 0 3px;
+  }
+  .price-card:hover { border-color: rgba(37,96,232,0.55); transform: translateX(4px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+  .price-service { display: flex; align-items: center; gap: 10px; }
+  .price-icon { font-size: 1.6rem; flex-shrink: 0; }
+  .price-name { font-weight: 700; font-size: 0.9rem; color: var(--white); line-height: 1.3; }
+  .price-brand { font-size: 0.72rem; color: var(--text-dim); margin-top: 2px; }
+  .price-amount {
+    font-family: 'Share Tech Mono', monospace; font-size: 1.15rem; font-weight: 900;
+    color: var(--yellow); white-space: nowrap; text-shadow: 0 0 12px rgba(245,216,0,0.3); flex-shrink: 0;
+  }
+  .price-note { text-align: center; margin-top: 20px; font-size: 0.8rem; color: var(--text-dim); font-family: 'Share Tech Mono', monospace; letter-spacing: 0.08em; }
+  .price-note span { color: var(--blue-glow); }
+
+  .price-free-banner {
+    display: flex; align-items: center; gap: 18px;
+    background: linear-gradient(135deg, rgba(74,222,128,0.1), rgba(26,79,196,0.12));
+    border: 1px solid rgba(74,222,128,0.35); border-radius: 14px;
+    padding: 18px 24px; margin-bottom: 22px; position: relative; overflow: hidden;
+  }
+  .price-free-banner::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, rgba(74,222,128,0.04), transparent);
+    pointer-events: none;
+  }
+  .price-free-icon { font-size: 2rem; flex-shrink: 0; }
+  .price-free-title { font-weight: 900; font-size: 1.05rem; color: #4ade80; margin-bottom: 3px; }
+  .price-free-sub { font-size: 0.8rem; color: var(--text-dim); }
+  .price-free-badge {
+    margin-left: auto; flex-shrink: 0;
+    background: #4ade80; color: #0a1a10;
+    font-family: 'Share Tech Mono', monospace; font-weight: 900; font-size: 0.85rem;
+    letter-spacing: 0.12em; padding: 6px 14px; border-radius: 6px;
+    box-shadow: 0 0 16px rgba(74,222,128,0.4);
+  }
+  @media(max-width: 480px) {
+    .price-free-banner { flex-wrap: wrap; gap: 12px; }
+    .price-free-badge { margin-left: 0; }
+  }
+
+  #brands { background: rgba(26,79,196,0.04); border-top: 1px solid rgba(37,96,232,0.1); border-bottom: 1px solid rgba(37,96,232,0.1); }
+  .brands-row { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .brand-chip {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 10px 18px; font-weight: 800; font-size: 0.95rem;
+    letter-spacing: 0.04em; color: var(--text-dim); transition: all 0.2s; min-height: 44px;
+  }
+  .brand-chip:hover { border-color: var(--yellow); color: var(--white); background: rgba(245,216,0,0.06); }
+  .brand-chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--blue-glow); flex-shrink: 0; }
+
+  #reviews {
+    padding: 70px 0;
+    background: rgba(10,12,18,0.6);
+    border-top: 1px solid rgba(37,96,232,0.12);
+    border-bottom: 1px solid rgba(37,96,232,0.12);
+  }
+  .reviews-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; gap: 14px; }
+  .google-badge {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px; padding: 7px 16px;
+    font-family: 'Share Tech Mono', monospace; font-size: 0.75rem;
+    color: var(--white); letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .elfsight-wrap {
+    border-radius: 14px; overflow: hidden;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(37,96,232,0.15);
+    padding: 4px;
+  }
+
+  .info-strip {
+    background: linear-gradient(90deg,var(--blue) 0%,#0f3080 100%);
+    padding: 36px 0; position: relative; overflow: hidden;
+  }
+  .info-strip::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(rgba(255,255,255,0.05) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.05) 1px,transparent 1px);
+    background-size: 30px 30px;
+  }
+  .info-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; position: relative; }
+  .info-card { display: flex; align-items: flex-start; gap: 14px; }
+  .info-icon { font-size: 1.8rem; flex-shrink: 0; margin-top: 2px; }
+  .info-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.7; margin-bottom: 4px; }
+  .info-value { font-weight: 800; font-size: 1rem; line-height: 1.3; }
+  .info-value a { color: inherit; text-decoration: none; }
+  .info-value a:hover { color: var(--yellow); }
+  .btn-maps {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 6px; padding: 7px 14px;
+    font-size: 0.78rem; font-weight: 700; color: #fff; letter-spacing: 0.04em;
+    text-decoration: none; cursor: pointer; transition: all 0.2s; min-height: 36px;
+  }
+  .btn-maps:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.5); }
+  .btn-maps svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .why-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); gap: 20px; }
+  .why-card {
+    text-align: center; padding: 32px 20px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px; transition: all 0.25s;
+  }
+  .why-card:hover { border-color: rgba(245,216,0,0.4); background: rgba(245,216,0,0.05); transform: translateY(-3px); }
+  .why-num { font-size: 2.6rem; line-height: 1; margin-bottom: 14px; }
+  .why-label { font-size: 1rem; font-weight: 700; color: var(--white); line-height: 1.5; }
+
+  #faq { background: rgba(10,14,24,0.6); border-top: 1px solid rgba(37,96,232,0.12); }
+  .faq-list { display: flex; flex-direction: column; gap: 10px; }
+  .faq-item {
+    background: linear-gradient(135deg,rgba(42,45,53,0.7),rgba(26,29,35,0.9));
+    border: 1px solid rgba(37,96,232,0.2); border-radius: 12px; overflow: hidden;
+    transition: border-color 0.25s;
+  }
+  .faq-item.open { border-color: rgba(37,96,232,0.5); }
+  .faq-q {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 22px; cursor: pointer; user-select: none;
+    font-weight: 700; font-size: 1rem; color: var(--white);
+    gap: 12px; min-height: 60px;
+  }
+  .faq-q:hover { color: var(--yellow); }
+  .faq-icon {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(37,96,232,0.2); border: 1px solid rgba(37,96,232,0.4);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 1rem; transition: all 0.3s; color: var(--blue-glow);
+    font-style: normal;
+  }
+  .faq-item.open .faq-icon { transform: rotate(45deg); background: rgba(37,96,232,0.4); color: var(--yellow); }
+  .faq-a {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+    padding: 0 22px;
+  }
+  .faq-item.open .faq-a { max-height: 300px; padding: 0 22px 18px; }
+  .faq-a p { font-size: 0.92rem; color: var(--text-dim); line-height: 1.7; }
+
+  #map-section { padding: 0; }
+  .map-wrap {
+    position: relative; height: 340px; overflow: hidden;
+    border-top: 1px solid rgba(37,96,232,0.2);
+    border-bottom: 1px solid rgba(37,96,232,0.2);
+  }
+  .map-wrap iframe { width: 100%; height: 100%; border: none; filter: grayscale(40%) invert(8%) contrast(96%); }
+  .map-overlay {
+    position: absolute; top: 16px; left: 16px; z-index: 2;
+    background: rgba(10,13,20,0.92); backdrop-filter: blur(12px);
+    border: 1px solid rgba(37,96,232,0.4); border-radius: 12px;
+    padding: 14px 18px;
+  }
+  .map-overlay .mo-title { font-weight: 800; font-size: 0.95rem; margin-bottom: 4px; }
+  .map-overlay .mo-addr { font-size: 0.78rem; color: var(--text-dim); }
+  .map-overlay .mo-hours { font-size: 0.75rem; color: var(--blue-glow); margin-top: 6px; font-family: 'Share Tech Mono', monospace; }
+
+  #order { background: rgba(26,79,196,0.04); border-top: 1px solid rgba(37,96,232,0.12); }
+  .order-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: start; }
+  .order-info { }
+  .order-perks { display: flex; flex-direction: column; gap: 14px; margin-top: 28px; }
+  .order-perk {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px; background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(37,96,232,0.15); border-radius: 10px;
+  }
+  .order-perk-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .order-perk-text { font-size: 0.9rem; color: var(--text-dim); }
+  .order-perk-text strong { color: var(--white); }
+
+  .order-form-box {
+    background: linear-gradient(135deg,rgba(42,45,53,0.6),rgba(26,29,35,0.9));
+    border: 1px solid rgba(37,96,232,0.25); border-radius: 16px; padding: 32px;
+  }
+  .form-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 22px; color: var(--white); }
+  .form-title span { color: var(--yellow); }
+
+  .form-group { margin-bottom: 16px; }
+  .form-label { display: block; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--blue-glow); margin-bottom: 7px; }
+  .form-control {
+    width: 100%; padding: 13px 16px; border-radius: 8px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(37,96,232,0.25);
+    color: var(--white); font-family: 'Exo 2', sans-serif; font-size: 0.95rem;
+    transition: all 0.2s; outline: none; appearance: none; -webkit-appearance: none;
+  }
+  .form-control::placeholder { color: rgba(138,154,184,0.5); }
+  .form-control:focus { border-color: var(--blue-glow); background: rgba(37,96,232,0.06); box-shadow: 0 0 0 3px rgba(37,96,232,0.12); }
+  select.form-control { cursor: pointer; }
+  select.form-control option { background: #1a1d23; color: var(--white); }
+  textarea.form-control { resize: vertical; min-height: 90px; line-height: 1.5; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .btn-submit {
+    width: 100%; padding: 16px; border: none; border-radius: 10px;
+    background: var(--yellow); color: var(--gray-dark);
+    font-family: 'Exo 2', sans-serif; font-weight: 800; font-size: 1rem;
+    cursor: pointer; letter-spacing: 0.04em; transition: all 0.2s;
+    box-shadow: 0 0 20px rgba(245,216,0,0.25); margin-top: 4px;
+    display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px;
+  }
+  .btn-submit:hover { background: var(--yellow-bright); transform: translateY(-2px); box-shadow: 0 0 35px rgba(245,216,0,0.4); }
+  .btn-submit:active { transform: scale(0.98); }
+  .btn-submit:disabled { background: rgba(245,216,0,0.5); cursor: not-allowed; }
+  .form-note { font-size: 0.72rem; color: var(--text-dim); text-align: center; margin-top: 10px; }
+
+  .form-success { display: none; text-align: center; padding: 24px 16px; }
+  .form-success .success-icon { font-size: 3rem; margin-bottom: 12px; }
+  .form-success .success-title { font-size: 1.2rem; font-weight: 800; color: #4ade80; margin-bottom: 8px; }
+  .form-success .success-sub { font-size: 0.9rem; color: var(--text-dim); line-height: 1.6; }
+
+  .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+  .contact-row {
+    display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px;
+    padding: 14px 16px; background: rgba(255,255,255,0.03);
+    border-radius: 10px; border: 1px solid rgba(37,96,232,0.15);
+  }
+  .contact-row-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .contact-row-text .lbl { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue-glow); margin-bottom: 3px; }
+  .contact-row-text .val { font-weight: 700; font-size: 0.95rem; }
+  .contact-row-text .val a { color: inherit; text-decoration: none; }
+  .contact-row-text .val a:hover { color: var(--yellow); }
+  .contact-cta-block { display: flex; flex-direction: column; gap: 14px; }
+
+  .big-cta-btn {
+    display: flex; align-items: center; gap: 16px;
+    padding: 20px 24px; border-radius: 14px;
+    text-decoration: none; cursor: pointer; border: none;
+    transition: all 0.25s; width: 100%; text-align: left;
+    font-family: 'Exo 2', sans-serif;
+  }
+  .big-cta-btn:hover { transform: translateY(-3px); }
+  .big-cta-phone {
+    background: linear-gradient(135deg,#1e3a8a,#1a4fc4);
+    border: 2px solid rgba(245,216,0,0.4); box-shadow: 0 0 30px rgba(37,96,232,0.3);
+  }
+  .big-cta-phone:hover { border-color: var(--yellow); box-shadow: 0 0 50px rgba(245,216,0,0.3); }
+  .big-cta-tg {
+    background: linear-gradient(135deg,#0f2d45,#1a5c7a);
+    border: 2px solid rgba(34,158,217,0.4); box-shadow: 0 0 30px rgba(34,158,217,0.2);
+  }
+  .big-cta-tg:hover { border-color: #229ed9; box-shadow: 0 0 50px rgba(34,158,217,0.4); }
+  .big-cta-ig {
+    background: linear-gradient(135deg,#3d1429,#5a1a4a);
+    border: 2px solid rgba(228,64,95,0.4); box-shadow: 0 0 30px rgba(228,64,95,0.2);
+  }
+  .big-cta-ig:hover { border-color: #e4405f; box-shadow: 0 0 50px rgba(228,64,95,0.4); }
+  .big-cta-maps {
+    background: linear-gradient(135deg,#0a2018,#0f3322);
+    border: 2px solid rgba(52,211,153,0.4); box-shadow: 0 0 30px rgba(52,211,153,0.15);
+  }
+  .big-cta-maps:hover { border-color: #34d399; box-shadow: 0 0 50px rgba(52,211,153,0.35); }
+  .big-cta-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.6rem;
+  }
+  .big-cta-icon-phone { background: rgba(245,216,0,0.15); }
+  .big-cta-icon-tg { background: rgba(34,158,217,0.2); }
+  .big-cta-icon-tg svg { width: 28px; height: 28px; fill: #fff; }
+  .big-cta-icon-ig { background: rgba(228,64,95,0.2); }
+  .big-cta-icon-ig svg { width: 28px; height: 28px; fill: #e4405f; }
+  .big-cta-icon-maps { background: rgba(52,211,153,0.2); }
+  .big-cta-icon-maps svg { width: 28px; height: 28px; fill: #34d399; }
+  .big-cta-text .sub { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; color: #fff; margin-bottom: 4px; }
+  .big-cta-text .main { font-size: 1.2rem; font-weight: 900; color: #fff; letter-spacing: 0.02em; font-family: 'Share Tech Mono', monospace; }
+  .big-cta-text .main.yellow { color: var(--yellow); text-shadow: 0 0 15px rgba(245,216,0,0.4); }
+  .big-cta-text .main.tg-color { color: #7dd3f0; }
+  .big-cta-text .main.ig-color { color: #f48fb1; }
+  .big-cta-text .main.maps-color { color: #6ee7b7; }
+
+  .slogan-block {
+    background: linear-gradient(135deg,rgba(245,216,0,0.1),rgba(37,96,232,0.1));
+    border: 1px solid rgba(245,216,0,0.25); border-radius: 12px;
+    padding: 26px; text-align: center; margin-bottom: 14px;
+  }
+  .slogan-text { font-size: 1.5rem; font-weight: 900; letter-spacing: 0.04em; color: var(--yellow); text-shadow: 0 0 20px rgba(245,216,0,0.3); }
+  .slogan-sep { color: var(--blue-glow); }
+  .slogan-sub { font-size: 0.78rem; color: var(--text-dim); margin-top: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  footer { background: rgba(10,12,16,0.95); border-top: 2px solid rgba(37,96,232,0.3); padding: 24px 0; text-align: center; }
+  .footer-logo { font-size: 1.25rem; font-weight: 900; margin-bottom: 8px; }
+  .footer-logo .top { color: var(--yellow); }
+  .footer-logo .srv { color: var(--blue-glow); }
+  .footer-copy { font-size: 0.75rem; color: var(--text-dim); }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s, transform 0.6s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media(max-width: 900px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .lang-switcher { top: auto; bottom: 80px; right: 16px; flex-direction: column; }
+    .sticky-cta { display: flex; }
+    .scroll-top { bottom: 80px; }
+    body { padding-bottom: 70px; }
+    .cta-popup { bottom: 90px; }
+  }
+  @media(max-width: 768px) {
+    .hero { min-height: auto; padding: 40px 0 60px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+    .hero-visual { display: none; }
+    .hero h1 { font-size: clamp(2rem,8vw,2.8rem); }
+    .hero-stats { gap: 16px; }
+    .info-grid { grid-template-columns: 1fr; gap: 16px; }
+    .contact-wrap { grid-template-columns: 1fr; gap: 24px; }
+    .order-wrap { grid-template-columns: 1fr; gap: 28px; }
+    section { padding: 60px 0; }
+    .services-grid { grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); }
+    .price-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .map-wrap { height: 280px; }
+    .map-overlay { display: none; }
+  }
+  @media(max-width: 480px) {
+    .hero h1 { font-size: 1.9rem; }
+    .hero-cta { flex-direction: column; }
+    .btn-primary,.btn-telegram,.btn-secondary { width: 100%; justify-content: center; }
+    .hero-stats { justify-content: space-between; }
+    .brands-row { gap: 8px; }
+    .brand-chip { font-size: 0.85rem; padding: 9px 14px; }
+    .nav-logo { font-size: 1.15rem; }
+    .cta-popup { max-width: calc(100vw - 40px); }
+    .sticky-cta-btn { font-size: 0.75rem; padding: 10px 8px; }
+  }
+
+  @media(prefers-reduced-motion: reduce) {
+    .phone-frame, .badge-1, .badge-2, .badge-3 { animation: none; }
+    .orbit-ring { animation: none; }
+    .nav-logo .gear-icon { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="circuit-bg">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#3d7fff" stroke-width="1.5" fill="none">
+      <path d="M0 150 H300 V200 H600 V150 H900"/><path d="M200 400 H500 V350 H800 V400 H1100 V450 H1440"/><path d="M0 600 H250 V650 H550 V600 H850"/><path d="M700 700 H950 V750 H1200 V700 H1440"/>
+      <path d="M300 0 V150 M300 200 V400"/><path d="M600 150 V50 M600 150 V300"/><path d="M900 0 V150"/><path d="M500 350 V200 M500 400 V600"/><path d="M800 400 V250"/>
+      <path d="M250 650 V900 M250 600 V350"/><path d="M550 650 V900"/><path d="M950 700 V550 M950 750 V900"/><path d="M1200 700 V500"/>
+      <circle cx="300" cy="150" r="5" fill="#3d7fff"/><circle cx="300" cy="200" r="5" fill="#3d7fff"/><circle cx="600" cy="150" r="5" fill="#3d7fff"/>
+      <circle cx="500" cy="350" r="5" fill="#3d7fff"/><circle cx="800" cy="400" r="5" fill="#3d7fff"/><circle cx="250" cy="600" r="5" fill="#3d7fff"/>
+      <circle cx="550" cy="650" r="5" fill="#3d7fff"/><circle cx="950" cy="700" r="5" fill="#f5d800"/><circle cx="1200" cy="700" r="5" fill="#f5d800"/>
+      <circle cx="250" cy="350" r="4" fill="none" stroke="#f5d800"/><circle cx="1100" cy="450" r="4" fill="none" stroke="#f5d800"/>
+      <rect x="380" y="220" width="80" height="50" rx="4"/><line x1="380" y1="235" x2="360" y2="235"/><line x1="380" y1="250" x2="360" y2="250"/>
+      <line x1="460" y1="235" x2="480" y2="235"/><line x1="460" y1="250" x2="480" y2="250"/>
+      <rect x="750" y="480" width="100" height="60" rx="4"/><line x1="750" y1="498" x2="730" y2="498"/><line x1="750" y1="515" x2="730" y2="515"/>
+      <line x1="850" y1="498" x2="870" y2="498"/><line x1="850" y1="515" x2="870" y2="515"/>
+    </g>
+  </svg>
+</div>
+
+<div class="moskali-overlay" id="moskaliOverlay" onclick="closeMoskali()">
+  <div class="flag-top"></div>
+  <div class="flag-bottom"></div>
+  <div class="overlay-text">Геть звідси<br>москалик 🇺🇦</div>
+  <div class="overlay-hint">[ натисніть будь-де щоб закрити ]</div>
+</div>
+
+<div class="cta-popup" id="ctaPopup">
+  <button class="cta-popup-close" onclick="closeCtaPopup()">✕</button>
+  <div class="cta-popup-title">💡 Потрібна допомога?</div>
+  <div class="cta-popup-sub">Залиште заявку або зателефонуйте — відповімо протягом 30 хвилин!</div>
+  <div class="cta-popup-buttons">
+    <a href="tel:0660052325" class="cta-popup-btn cta-popup-btn-call">📞 Зателефонувати</a>
+    <a href="#order" class="cta-popup-btn cta-popup-btn-form" onclick="closeCtaPopup()">📋 Залишити заявку</a>
+  </div>
+</div>
+
+<div class="repair-ticker">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<div class="lang-switcher">
+  <button class="lang-btn active" onclick="setLang('uk')">🇺🇦 УКР</button>
+  <button class="lang-btn" onclick="setLang('ru')">РУС</button>
+</div>
+
+<button class="scroll-top" id="scrollTopBtn" onclick="scrollToTop()" aria-label="Нагору">↑</button>
+
+<div class="sticky-cta" id="stickyCta">
+  <a href="tel:0660052325" class="sticky-cta-btn sticky-cta-phone">📞 Call</a>
+  <button class="sticky-cta-btn sticky-cta-tg" onclick="openTelegram()">
+    <svg viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 14.26l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.836.326z"/></svg>
+    TG
+  </button>
+  <a href="https://www.instagram.com/top_service_dndz?igsh=aWJwcHBuMmZvMjE0" target="_blank" class="sticky-cta-btn sticky-cta-ig">📷 IG</a>
+</div>
+
+<nav>
+  <div class="inner">
+    <a href="#" class="nav-logo">
+      <span class="gear-icon">⚙</span>
+      <span style="color: var(--yellow); font-weight: 900;">ТОП</span>
+      <span style="color: var(--blue-glow); font-weight: 900;">СЕРВІС</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Послуги</a></li>
+      <li><a href="#price">Прайс</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#reviews">Відгуки</a></li>
+      <li><a href="#order">Замовити</a></li>
+      <li><a href="#contact">Контакти</a></li>
+    </ul>
+    <a href="tel:0660052325" class="nav-phone" style="display:none" id="navPhone">📞 066 005 2325</a>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services" onclick="closeMenu()">Послуги</a>
+  <a href="#price" onclick="closeMenu()">Прайс</a>
+  <a href="#faq" onclick="closeMenu()">FAQ</a>
+  <a href="#reviews" onclick="closeMenu()">Відгуки</a>
+  <a href="#order" onclick="closeMenu()">Замовити ремонт</a>
+  <a href="#contact" onclick="closeMenu()">Контакти</a>
+  <a href="tel:0660052325" class="m-phone" onclick="closeMenu()">066 005 2325</a>
+</div>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div class="hero-tag">Ремонт телефонів · Камʼянське</div>
+        <h1>
+          <span class="line1">Ремонт вашого</span>
+          <span class="line2">смартфона</span>
+          <span class="line3">швидко · якісно · з гарантією</span>
+        </h1>
+        <p class="hero-sub">
+          Оригінальні запчастини, досвідчені майстри та гарантія на всі роботи.<br>
+          Ремонт будь-якого бренду в день звернення.
+        </p>
+        <div class="hero-cta">
+          <a href="tel:0660052325" class="btn-primary">📞 Зателефонувати</a>
+          <button class="btn-telegram" onclick="openTelegram()">
+            <svg viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 14.26l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.836.326z"/></svg>
+            Telegram
+          </button>
+          <a href="#order" class="btn-secondary">Замовити →</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><div class="num">15+</div><div class="lbl">років досвіду</div></div>
+          <div class="stat"><div class="num">1000+</div><div class="lbl">ремонтів</div></div>
+          <div class="stat"><div class="num">100%</div><div class="lbl">гарантія</div></div>
+          <div class="stat"><div class="num">1 год</div><div class="lbl">середній час</div></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="orbit-ring"><div class="orbit-dot"></div></div>
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-icon">🔧</div>
+            <div class="phone-text">ДІАГНОСТИКА<br>ЗАКІНЧЕНА<br>─────────<br>РЕМОНТ: OK</div>
+          </div>
+          <div class="phone-btn"></div>
+        </div>
+        <div class="badge badge-1">✓ Оригінал запчастини</div>
+        <div class="badge badge-2">⚡ Ремонт за 1 годину</div>
+        <div class="badge badge-3">🛡 Гарантія 30 днів</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="info-strip">
+  <div class="container">
+    <div class="info-grid">
+      <div class="info-card reveal">
+        <div class="info-icon">📞</div>
+        <div class="info-content">
+          <div class="info-label">Телефон</div>
+          <div class="info-value"><a href="tel:0660052325">066 005 2325</a></div>
+        </div>
+      </div>
+      <div class="info-card reveal">
+        <div class="info-icon">📍</div>
+        <div class="info-content">
+          <div class="info-label">Адреса</div>
+          <div class="info-value">вул. Медична 1/11, Камʼянське</div>
+          <!-- onclick викликає конверсію Google Ads перед переходом на карту -->
+          <a href="https://www.google.com/maps/dir/?api=1&destination=вул.+Медична+1%2F11%2C+Кам%27янське"
+             target="_blank"
+             class="btn-maps"
+             onclick="trackRouteConversion()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Маршрут →
+          </a>
+        </div>
+      </div>
+      <div class="info-card reveal">
+        <div class="info-icon">🕐</div>
+        <div class="info-content">
+          <div class="info-label">Графік роботи</div>
+          <div class="info-value">Пн–Пт: 10:00–18:00<br>Сб: 11:00–14:00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="services">
+  <div class="container">
+    <div class="section-label">послуги</div>
+    <h2 class="section-title reveal">Що ми <span>ремонтуємо</span></h2>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <span class="svc-icon">📱</span>
+        <div class="svc-name">Заміна скла / дисплея</div>
+        <div class="svc-desc">Зі збереженням заводської матриці. Оригінальне скло для всіх моделей.</div>
+        <div class="svc-price">▶ Швидко та якісно</div>
+      </div>
+      <div class="service-card reveal">
+        <span class="svc-icon">🔋</span>
+        <div class="svc-name">Заміна акумулятора</div>
+        <div class="svc-desc">Оригінальні батареї. Відновлюємо до 100% ємності. Гарантія 3 місяці.</div>
+        <div class="svc-price">▶ Гарантія 30 днів</div>
+      </div>
+      <div class="service-card reveal">
+        <span class="svc-icon">🔌</span>
+        <div class="svc-name">Ремонт роз'єму зарядки</div>
+        <div class="svc-desc">USB-C, Lightning, micro-USB — замінимо будь-який тип роз'єму.</div>
+        <div class="svc-price">▶ Діагностика безкоштовно</div>
+      </div>
+      <div class="service-card reveal">
+        <span class="svc-icon">💻</span>
+        <div class="svc-name">Ремонт ноутбуків</div>
+        <div class="svc-desc">Заміна екрану, клавіатури, термопасти, SSD та оперативної памʼяті.</div>
+        <div class="svc-price">▶ Будь-який бренд</div>
+      </div>
+      <div class="service-card reveal">
+        <span class="svc-icon">🛍</span>
+        <div class="svc-name">Аксесуари</div>
+        <div class="svc-desc">Захисне скло, чохли, зарядні пристрої, навушники та інше.</div>
+        <div class="svc-price">▶ Великий асортимент</div>
+      </div>
+      <div class="service-card reveal">
+        <span class="svc-icon">🔍</span>
+        <div class="svc-name">Діагностика</div>
+        <div class="svc-desc">Повна діагностика пристрою — безкоштовно при будь-якому ремонті.</div>
+        <div class="svc-price">▶ Безкоштовно</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="price">
+  <div class="container">
+    <div class="section-label">вартість ремонту</div>
+    <h2 class="section-title reveal">Орієнтовний <span>прайс</span></h2>
+    
+    <div class="price-free-banner reveal">
+      <span class="price-free-icon">🎯</span>
+      <div>
+        <div class="price-free-title">Консультація — безкоштовно</div>
+        <div class="price-free-sub">Приходьте або телефонуйте — оцінимо без жодних зобовʼязань</div>
+      </div>
+      <span class="price-free-badge">FREE</span>
+    </div>
+
+    <div class="price-grid">
+      <div class="price-card reveal">
+        <div class="price-service"><div class="price-icon">🛍️</div><div><div class="price-name">Аксесуари</div><div class="price-brand">Чохли, кабелі, зарядки</div></div></div>
+        <div class="price-amount">150+ грн</div>
+      </div>
+      <div class="price-card reveal">
+        <div class="price-service"><div class="price-icon">🛡️</div><div><div class="price-name">Захисне скло</div><div class="price-brand">Для будь-якої моделі</div></div></div>
+        <div class="price-amount">250+ грн</div>
+      </div>
+      <div class="price-card reveal">
+        <div class="price-service"><div class="price-icon">🧹</div><div><div class="price-name">Чистка комплексна</div><div class="price-brand">Повне очищення</div></div></div>
+        <div class="price-amount">200 грн</div>
+      </div>
+      <div class="price-card reveal">
+        <div class="price-service"><div class="price-icon">🔌</div><div><div class="price-name">Роз'єм зарядки</div><div class="price-brand">USB-C / Lightning / micro</div></div></div>
+        <div class="price-amount">500+ грн</div>
+      </div>
+      <div class="price-card reveal">
+        <div class="price-service"><div class="price-icon">📱</div><div><div class="price-name">Заміна скла дисплею</div><div class="price-brand">Зі збереженням матриці</div></div></div>
+        <div class="price-amount">800+ грн</div>
+      </div>
+      <div class="price-card reveal">
+        <div class="price-service"><div class="price-icon">🖥️</div><div><div class="price-name">Заміна дисплею</div><div class="price-brand">iPhone / Samsung / Xiaomi</div></div></div>
+        <div class="price-amount">700+ грн</div>
+      </div>
+    </div>
+    <div class="price-note">
+      <span>※</span> Точна ціна після діагностики. Ціни орієнтовні. Телефонуйте: 066 005 2325
+    </div>
+  </div>
+</section>
+
+<section id="order">
+  <div class="container">
+    <div class="section-label">онлайн замовлення</div>
+    <h2 class="section-title reveal">Залишити <span>заявку</span></h2>
+    <div class="order-wrap">
+      
+      <div class="order-info reveal">
+        <p style="color:var(--text-dim);line-height:1.7;margin-bottom:10px;">
+          Не хочете телефонувати? Заповніть форму — ми зателефонуємо вам протягом 30 хвилин!
+        </p>
+        <div class="order-perks">
+          <div class="order-perk">
+            <div class="order-perk-icon">⏱</div>
+            <div class="order-perk-text"><strong>Відповідаємо за 30 хвилин</strong> в робочий час</div>
+          </div>
+          <div class="order-perk">
+            <div class="order-perk-icon">💬</div>
+            <div class="order-perk-text"><strong>Попередня оцінка</strong> вартості ремонту</div>
+          </div>
+          <div class="order-perk">
+            <div class="order-perk-icon">🔒</div>
+            <div class="order-perk-text"><strong>Ваші дані в безпеці</strong> — не передаємо третім</div>
+          </div>
+          <div class="order-perk">
+            <div class="order-perk-icon">🚫</div>
+            <div class="order-perk-text"><strong>Ніяких зобов'язань</strong> — заявка безкоштовна</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-form-box reveal">
+        <div class="form-title">Заявка на <span>ремонт</span></div>
+        <div id="orderFormInner">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="fname">Ваше ім'я</label>
+              <input class="form-control" type="text" id="fname" placeholder="Олексій" autocomplete="given-name">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fphone">Номер телефону</label>
+              <input class="form-control" type="tel" id="fphone" placeholder="066 000 0000" autocomplete="tel">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fdevice">Пристрій</label>
+            <select class="form-control" id="fdevice">
+              <option value="" disabled selected>Оберіть тип пристрою...</option>
+              <option>iPhone</option>
+              <option>Samsung</option>
+              <option>Xiaomi / Redmi / POCO</option>
+              <option>Realme</option>
+              <option>Huawei</option>
+              <option>Oppo</option>
+              <option>Ноутбук</option>
+              <option>Інший смартфон</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fproblem">Тип несправності</label>
+            <select class="form-control" id="fproblem">
+              <option value="" disabled selected>Що сталося?</option>
+              <option>Розбитий екран / скло</option>
+              <option>Не заряджається</option>
+              <option>Швидко розряджається</option>
+              <option>Не вмикається</option>
+              <option>Потрапила вода</option>
+              <option>Не працює камера</option>
+              <option>Не працює динамік / мікрофон</option>
+              <option>Інша несправність</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fcomment">Коментар (необов'язково)</label>
+            <textarea class="form-control" id="fcomment" placeholder="Детальніше опишіть проблему..."></textarea>
+          </div>
+          <button class="btn-submit" id="submitBtn" onclick="submitForm()">
+            📨 Надіслати заявку
+          </button>
+          <div class="form-note">Натискаючи кнопку, ви погоджуєтесь на контакт з нашим майстром</div>
+        </div>
+
+        <div class="form-loading" id="formLoading">
+          <div class="spinner"></div>
+          <div class="form-loading-text">Надіслання заявки...</div>
+        </div>
+
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">✅</div>
+          <div class="success-title">Заявку отримано!</div>
+          <div class="success-sub">
+            Дякуємо, <strong id="successName"></strong>!<br>
+            Ми зателефонуємо вам на <strong id="successPhone"></strong><br>
+            протягом 30 хвилин у робочий час.<br><br>
+            Контакт: <a href="tel:0660052325" style="color:var(--yellow)">066 005 2325</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="section-label">контакти</div>
+    <h2 class="section-title reveal">Де нас <span>знайти</span></h2>
+    <div class="contact-wrap">
+      <div class="contact-info-block reveal">
+        <div class="contact-row">
+          <div class="contact-row-icon">📞</div>
+          <div class="contact-row-text">
+            <div class="lbl">Телефон</div>
+            <div class="val"><a href="tel:0660052325">066 005 2325</a></div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-row-icon">📍</div>
+          <div class="contact-row-text">
+            <div class="lbl">Адреса</div>
+            <div class="val">вул. Медична 1/11, Камʼянське</div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-row-icon">🕐</div>
+          <div class="contact-row-text">
+            <div class="lbl">Графік роботи</div>
+            <div class="val">Пн–Пт: 10:00 – 18:00<br>Сб: 11:00 – 14:00<br><span style="color:var(--text-dim);font-size:0.82rem">Неділя: вихідний</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-cta-block reveal">
+        <a href="tel:0660052325" class="big-cta-btn big-cta-phone">
+          <div class="big-cta-icon big-cta-icon-phone">📞</div>
+          <div class="big-cta-text">
+            <div class="sub">Зателефонувати</div>
+            <div class="main yellow">066 005 2325</div>
+          </div>
+        </a>
+        
+        <button class="big-cta-btn big-cta-tg" onclick="openTelegram()">
+          <div class="big-cta-icon big-cta-icon-tg">
+            <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 14.26l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.836.326z"/></svg>
+          </div>
+          <div class="big-cta-text">
+            <div class="sub">Написати в</div>
+            <div class="main tg-color">Telegram →</div>
+          </div>
+        </button>
+
+        <a href="https://www.instagram.com/top_service_dndz?igsh=aWJwcHBuMmZvMjE0" target="_blank" class="big-cta-btn big-cta-ig">
+          <div class="big-cta-icon big-cta-icon-ig">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1 1 12.324 0 6.162 6.162 0 0 1-12.324 0zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm4.965-10.322a1.44 1.44 0 1 1 2.881.001 1.44 1.44 0 0 1-2.881-.001z"/></svg>
+          </div>
+          <div class="big-cta-text">
+            <div class="sub">Підписуйтесь</div>
+            <div class="main ig-color">Instagram →</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo"><span class="top">ТОП</span> <span class="srv">СЕРВІС</span></div>
+    <div class="footer-copy">© 2025 · Ремонт смартфонів та ноутбуків · вул. Медична 1/11, Камʼянське</div>
+  </div>
+</footer>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(r => observer.observe(r));
+
+document.querySelectorAll('.hero-left > *').forEach((el, i) => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.6s, transform 0.6s';
+  setTimeout(() => { el.style.opacity='1'; el.style.transform='translateY(0)'; }, 200 + i * 120);
+});
+
+setTimeout(() => {
+  const popup = document.getElementById('ctaPopup');
+  if (popup) popup.classList.add('show');
+}, 60000);
+
+function closeCtaPopup() {
+  const popup = document.getElementById('ctaPopup');
+  if (popup) {
+    popup.style.animation = 'popupSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) reverse';
+    setTimeout(() => popup.classList.remove('show'), 400);
+  }
+}
+
+(function() {
+  const navPhone = document.getElementById('navPhone');
+  if (window.innerWidth > 900) navPhone.style.display = 'flex';
+  window.addEventListener('resize', () => {
+    navPhone.style.display = window.innerWidth > 900 ? 'flex' : 'none';
+  });
+})();
+
+function toggleMenu() {
+  const m = document.getElementById('mobileMenu');
+  const h = document.getElementById('hamburger');
+  const isOpen = m.classList.contains('open');
+  if (isOpen) {
+    m.style.opacity = '0';
+    m.style.transform = 'translateY(-20px)';
+    setTimeout(() => { m.classList.remove('open'); }, 280);
+  } else {
+    m.classList.add('open');
+    requestAnimationFrame(() => { m.style.opacity='1'; m.style.transform='translateY(0)'; });
+  }
+  h.classList.toggle('open');
+}
+
+function closeMenu() {
+  const m = document.getElementById('mobileMenu');
+  const h = document.getElementById('hamburger');
+  m.style.opacity = '0';
+  m.style.transform = 'translateY(-20px)';
+  setTimeout(() => { m.classList.remove('open'); }, 280);
+  h.classList.remove('open');
+}
+
+const scrollBtn = document.getElementById('scrollTopBtn');
+window.addEventListener('scroll', () => {
+  scrollBtn.classList.toggle('visible', window.scrollY > 300);
+}, { passive: true });
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function setLang(lang) {
+  if (lang === 'ru') {
+    document.getElementById('moskaliOverlay').classList.add('show');
+  } else {
+    document.querySelector('.lang-btn.active').classList.remove('active');
+    document.querySelectorAll('.lang-btn')[0].classList.add('active');
+  }
+}
+
+function closeMoskali() {
+  document.getElementById('moskaliOverlay').classList.remove('show');
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lang-btn')[0].classList.add('active');
+}
+
+function openTelegram() {
+  window.open('https://t.me/TopService_Kamianske_bot', '_blank');
+}
+
+function toggleFaq(el) {
+  const item = el.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+async function submitForm() {
+  const name = document.getElementById('fname').value.trim();
+  const phone = document.getElementById('fphone').value.trim();
+  const device = document.getElementById('fdevice').value;
+  const problem = document.getElementById('fproblem').value;
+  const comment = document.getElementById('fcomment').value.trim();
+
+  if (!name) { alert('Будь ласка, введіть ваше ім\'я'); document.getElementById('fname').focus(); return; }
+  if (!phone || phone.replace(/\D/g,'').length < 9) { alert('Будь ласка, введіть коректний номер телефону'); document.getElementById('fphone').focus(); return; }
+  if (!device) { alert('Будь ласка, оберіть тип пристрою'); document.getElementById('fdevice').focus(); return; }
+  if (!problem) { alert('Будь ласка, оберіть тип несправності'); document.getElementById('fproblem').focus(); return; }
+
+  const formInner = document.getElementById('orderFormInner');
+  const formLoading = document.getElementById('formLoading');
+  const submitBtn = document.getElementById('submitBtn');
+  
+  formInner.style.display = 'none';
+  formLoading.classList.add('show');
+  submitBtn.disabled = true;
+
+  const message = `
+📱 <b>НОВА ЗАЯВКА НА РЕМОНТ</b>
+
+👤 <b>Ім'я:</b> ${escapeHtml(name)}
+📞 <b>Телефон:</b> <code>${escapeHtml(phone)}</code>
+🔧 <b>Пристрій:</b> ${escapeHtml(device)}
+⚠️ <b>Проблема:</b> ${escapeHtml(problem)}
+${comment ? `💬 <b>Коментар:</b> ${escapeHtml(comment)}` : ''}
+
+🕐 <b>Час:</b> ${new Date().toLocaleString('uk-UA')}
+  `.trim();
+
+  try {
+    const botToken = '8736514197:AAFEE90LeNeu-l6AyFz4jQHe-KALfJkQ0PU';
+    const chatId = '6221013974';
+
+    const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' })
+    });
+
+    const result = await response.json();
+
+    if (result.ok) {
+      formLoading.classList.remove('show');
+      document.getElementById('successName').textContent = name;
+      document.getElementById('successPhone').textContent = phone;
+      document.getElementById('formSuccess').style.display = 'block';
+      
+      setTimeout(() => {
+        document.getElementById('fname').value = '';
+        document.getElementById('fphone').value = '';
+        document.getElementById('fdevice').value = '';
+        document.getElementById('fproblem').value = '';
+        document.getElementById('fcomment').value = '';
+        formInner.style.display = 'block';
+        document.getElementById('formSuccess').style.display = 'none';
+        submitBtn.disabled = false;
+      }, 5000);
+    } else {
+      throw new Error('Telegram API error');
+    }
+
+  } catch (error) {
+    console.error('Ошибка:', error);
+    formLoading.classList.remove('show');
+    formInner.style.display = 'block';
+    submitBtn.disabled = false;
+    alert('❌ Помилка. Спробуйте ще раз або телефонуйте: 066 005 2325');
+  }
+}
+
+function escapeHtml(text) {
+  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+  return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+const tickerItems = [
+  { brand: 'iPhone 14 Pro', op: 'заміна дисплея', status: '✅ Готово' },
+  { brand: 'Samsung S23', op: 'заміна акумулятора', status: '✅ Готово' },
+  { brand: 'Xiaomi 13T', op: 'ремонт роз\'єму USB-C', status: '🔧 В роботі' },
+  { brand: 'iPhone 12', op: 'розбитий екран', status: '✅ Готово' },
+  { brand: 'Realme 10 Pro', op: 'повна діагностика', status: '✅ Готово' },
+];
+
+function buildTicker() {
+  const track = document.getElementById('tickerTrack');
+  const doubled = [...tickerItems, ...tickerItems];
+  doubled.forEach(item => {
+    const el = document.createElement('span');
+    el.className = 'ticker-item';
+    el.innerHTML = `<span class="status-dot"></span><span class="brand">${item.brand}</span><span>—</span><span class="op">${item.op}</span><span>${item.status}</span><span class="ticker-sep">◆</span>`;
+    track.appendChild(el);
+  });
+}
+
+buildTicker();
+</script>
+</body>
+</html>
+ENDOFFILE
+echo "File created, size: $(wc -c < /home/claude/index.html) bytes"
